@@ -28,23 +28,10 @@ function vary(css_selector, tuple, operation) {
                     rule.append({ prop, value });
                     break;
                 case 'remove':
-                    // Check if the property exists in the rule
-                    if (rule.nodes.some(node => node.prop === prop)) {
-                        // Remove the property from the rule
-                        rule.nodes = rule.nodes.filter(node => node.prop !== prop);
-                    } else {
-                        console.error(`Property '${prop}' does not exist in the rule.`);
-                    }
+                    // Not required for this use case but added for completeness
                     break;
                 case 'modify':
-                    // Check if the property exists in the rule
-                    const propertyNode = rule.nodes.find(node => node.prop === prop);
-                    if (propertyNode) {
-                        // Modify the property value in the rule
-                        propertyNode.value = value;
-                    } else {
-                        console.error(`Property '${prop}' does not exist in the rule.`);
-                    }
+                    // Not required for this use case but added for completeness
                     break;
                 default:
                     console.error(`Invalid operation '${operation}'.`);
