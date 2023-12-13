@@ -197,7 +197,6 @@ body {
     background-color: white;
     overflow-y: scroll;
     padding-left: 5px;
-    isolation: isolate;
 }
 
 .task-list-icon {
