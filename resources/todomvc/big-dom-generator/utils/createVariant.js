@@ -2,6 +2,9 @@ const fs = require("fs");
 const postcss = require("postcss");
 const selectorParser = require("postcss-selector-parser");
 
+const INPUT_FILE_PATH = "./dist/big-dom-generator-v1.css";
+const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
+
 /**
  * Modifies CSS rules based on the provided selector, tuple, and operation.
  *
@@ -34,25 +37,23 @@ function vary(css_selector, tuple, operation) {
                     // Not required for this use case but added for completeness
                     break;
                 default:
-                    console.error(`Invalid operation '${operation}'.`);
-                    break;
+                    throw new Error(`Invalid operation '${operation}'.`);
             }
         }
     });
 
     // Stringify the modified CSS and write it back to the file
     const output = root.toString();
-    fs.writeFileSync("./dist/big-dom-generator-v2.css", output);
+    fs.writeFileSync(OUTPUT_FILE_PATH, output);
 }
 
 let css;
 
-// Read the CSS file
 try {
-    css = fs.readFileSync("./dist/big-dom-generator-v1.css", "utf-8");
+    css = fs.readFileSync(INPUT_FILE_PATH, "utf-8");
 } catch (error) {
     console.error("An error occurred while reading the CSS file:", error);
-    return; // Stop execution if file reading fails
+    return;
 }
 
 try {
