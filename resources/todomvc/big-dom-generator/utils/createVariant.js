@@ -10,8 +10,8 @@ const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
  *
  * @param {string} cssSelector - The CSS selector to match.
  * @param {Array} propValueTuple - The tuple containing the property and value to apply.
- * @param {string} operation - The operation to perform ('add', 'remove', or 'modify').
- * @returns {void}
+ * @param {string} operation - The operation to perform ('add', 'remove', or 'modify'). At present, only the "add" operation is implemented.
+ * @returns {string} - The modified CSS as a string.
  */
 function vary(cssSelector, propValueTuple, operation) {
     // Parse the CSS
@@ -30,21 +30,14 @@ function vary(cssSelector, propValueTuple, operation) {
                 case "add":
                     rule.append({ prop, value });
                     break;
-                case "remove":
-                    // Not required for this use case but added for completeness
-                    break;
-                case "modify":
-                    // Not required for this use case but added for completeness
-                    break;
                 default:
                     throw new Error(`Invalid operation '${operation}'.`);
             }
         }
     });
 
-    // Stringify the modified CSS and write it back to the file
-    const output = root.toString();
-    fs.writeFileSync(OUTPUT_FILE_PATH, output);
+    // Stringify the modified CSS and return it
+    return root.toString();
 }
 
 let css;
@@ -57,7 +50,8 @@ try {
 }
 
 try {
-    vary(".tree-area", ["isolation", "isolate"], "add");
+    const modifiedCSS = vary(".tree-area", ["isolation", "isolate"], "add");
+    fs.writeFileSync(OUTPUT_FILE_PATH, modifiedCSS);
 } catch (error) {
     console.error("An error occurred while varying the CSS:", error);
 }
