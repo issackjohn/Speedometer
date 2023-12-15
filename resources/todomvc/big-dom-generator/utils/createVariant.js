@@ -9,11 +9,11 @@ const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
  * Modifies CSS rules based on the provided selector, tuple, and operation.
  *
  * @param {string} cssSelector - The CSS selector to match.
- * @param {Array} propValueTuple - The tuple containing the property and value to apply.
+ * @param {Array<[string, string]>} propValueTuples - The property-value tuples to apply.
  * @param {string} operation - The operation to perform ('add', 'remove', or 'modify'). At present, only the "add" operation is implemented.
  * @returns {string} - The modified CSS as a string.
  */
-function vary(cssSelector, propValueTuple, operation) {
+function vary(cssSelector, propValueTuples, operation) {
     // Parse the CSS
     const root = postcss.parse(css);
 
@@ -25,10 +25,11 @@ function vary(cssSelector, propValueTuple, operation) {
         // If the selector matches the provided cssSelector
         if (selector === cssSelector) {
             // Apply the operation to the propValueTuple
-            const [prop, value] = propValueTuple;
+            const props = propValueTuples.map(([prop, value]) => ({ prop, value }));
+
             switch (operation) {
                 case "add":
-                    rule.append({ prop, value });
+                    rule.append(...props);
                     break;
                 default:
                     throw new Error(`Invalid operation '${operation}'.`);
@@ -50,7 +51,7 @@ try {
 }
 
 try {
-    const modifiedCSS = vary(".tree-area", ["isolation", "isolate"], "add");
+    const modifiedCSS = vary(".tree-area", [["isolation", "isolate"]], "add");
     fs.writeFileSync(OUTPUT_FILE_PATH, modifiedCSS);
 } catch (error) {
     console.error("An error occurred while varying the CSS:", error);
