@@ -4,6 +4,7 @@ const selectorParser = require("postcss-selector-parser");
 
 const INPUT_FILE_PATH = "./dist/big-dom-generator-v1.css";
 const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
+let root;
 
 /**
  * Modifies CSS rules based on the provided selector, tuple, and operation.
@@ -14,39 +15,34 @@ const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
  * @returns {string} - The modified CSS as a string.
  */
 function vary(cssSelector, propValueTuples, operation) {
-    const root = postcss.parse(css);
+    try {
+        root.walkRules((rule) => {
+            const selector = selectorParser().processSync(rule);
 
-    root.walkRules((rule) => {
-        const selector = selectorParser().processSync(rule);
+            if (selector === cssSelector) {
+                const props = propValueTuples.map(([prop, value]) => ({ prop, value }));
 
-        if (selector === cssSelector) {
-            const props = propValueTuples.map(([prop, value]) => ({ prop, value }));
-
-            switch (operation) {
-                case "add":
-                    rule.append(...props);
-                    break;
-                default:
-                    throw new Error(`Invalid operation '${operation}'.`);
+                switch (operation) {
+                    case "add":
+                        rule.append(...props);
+                        break;
+                    default:
+                        throw new Error(`Invalid operation '${operation}'.`);
+                }
             }
-        }
-    });
+        });
 
-    return root.toString();
+        root = root.toString();
+        fs.writeFileSync(OUTPUT_FILE_PATH, root.toString());
+    } catch (error) {
+        console.error("An error occurred while varying the CSS:", error);
+    }
 }
 
-let css;
-
 try {
-    css = fs.readFileSync(INPUT_FILE_PATH, "utf-8");
+    const css = fs.readFileSync(INPUT_FILE_PATH, "utf-8");
+    root = postcss.parse(css);
+    vary(".tree-area", [["isolation", "isolate"]], "add");
 } catch (error) {
     console.error("An error occurred while reading the CSS file:", error);
-    return;
-}
-
-try {
-    const modifiedCSS = vary(".tree-area", [["isolation", "isolate"]], "add");
-    fs.writeFileSync(OUTPUT_FILE_PATH, modifiedCSS);
-} catch (error) {
-    console.error("An error occurred while varying the CSS:", error);
 }
