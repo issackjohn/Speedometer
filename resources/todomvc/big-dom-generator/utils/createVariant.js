@@ -33,7 +33,6 @@ function vary(cssSelector, propValueTuples, operation) {
         });
 
         root = root.toString();
-        fs.writeFileSync(OUTPUT_FILE_PATH, root.toString());
     } catch (error) {
         console.error("An error occurred while varying the CSS:", error);
     }
@@ -43,6 +42,7 @@ try {
     const css = fs.readFileSync(INPUT_FILE_PATH, "utf-8");
     root = postcss.parse(css);
     vary(".tree-area", [["isolation", "isolate"]], "add");
+    fs.writeFileSync(OUTPUT_FILE_PATH, root.toString());
 } catch (error) {
     console.error("An error occurred while reading the CSS file:", error);
 }
