@@ -14,17 +14,12 @@ const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
  * @returns {string} - The modified CSS as a string.
  */
 function vary(cssSelector, propValueTuples, operation) {
-    // Parse the CSS
     const root = postcss.parse(css);
 
-    // Walk through every rule in the CSS
     root.walkRules((rule) => {
-        // Parse the selector
         const selector = selectorParser().processSync(rule);
 
-        // If the selector matches the provided cssSelector
         if (selector === cssSelector) {
-            // Apply the operation to the propValueTuple
             const props = propValueTuples.map(([prop, value]) => ({ prop, value }));
 
             switch (operation) {
@@ -37,7 +32,6 @@ function vary(cssSelector, propValueTuples, operation) {
         }
     });
 
-    // Stringify the modified CSS and return it
     return root.toString();
 }
 
