@@ -8,12 +8,12 @@ const OUTPUT_FILE_PATH = "./dist/big-dom-generator-v2.css";
 /**
  * Modifies CSS rules based on the provided selector, tuple, and operation.
  *
- * @param {string} css_selector - The CSS selector to match.
- * @param {Array} tuple - The tuple containing the property and value to apply.
+ * @param {string} cssSelector - The CSS selector to match.
+ * @param {Array} propValueTuple - The tuple containing the property and value to apply.
  * @param {string} operation - The operation to perform ('add', 'remove', or 'modify').
  * @returns {void}
  */
-function vary(css_selector, tuple, operation) {
+function vary(cssSelector, propValueTuple, operation) {
     // Parse the CSS
     const root = postcss.parse(css);
 
@@ -22,10 +22,10 @@ function vary(css_selector, tuple, operation) {
         // Parse the selector
         const selector = selectorParser().processSync(rule);
 
-        // If the selector matches the provided css_selector
-        if (selector === css_selector) {
-            // Apply the operation to the tuple
-            const [prop, value] = tuple;
+        // If the selector matches the provided cssSelector
+        if (selector === cssSelector) {
+            // Apply the operation to the propValueTuple
+            const [prop, value] = propValueTuple;
             switch (operation) {
                 case "add":
                     rule.append({ prop, value });
