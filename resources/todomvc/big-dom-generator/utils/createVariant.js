@@ -1,6 +1,6 @@
-const fs = require('fs');
-const postcss = require('postcss');
-const selectorParser = require('postcss-selector-parser');
+const fs = require("fs");
+const postcss = require("postcss");
+const selectorParser = require("postcss-selector-parser");
 
 /**
  * Modifies CSS rules based on the provided selector, tuple, and operation.
@@ -15,7 +15,7 @@ function vary(css_selector, tuple, operation) {
     const root = postcss.parse(css);
 
     // Walk through every rule in the CSS
-    root.walkRules(rule => {
+    root.walkRules((rule) => {
         // Parse the selector
         const selector = selectorParser().processSync(rule);
 
@@ -24,13 +24,13 @@ function vary(css_selector, tuple, operation) {
             // Apply the operation to the tuple
             const [prop, value] = tuple;
             switch (operation) {
-                case 'add':
+                case "add":
                     rule.append({ prop, value });
                     break;
-                case 'remove':
+                case "remove":
                     // Not required for this use case but added for completeness
                     break;
-                case 'modify':
+                case "modify":
                     // Not required for this use case but added for completeness
                     break;
                 default:
@@ -42,21 +42,21 @@ function vary(css_selector, tuple, operation) {
 
     // Stringify the modified CSS and write it back to the file
     const output = root.toString();
-    fs.writeFileSync('./dist/big-dom-generator-v2.css', output);
+    fs.writeFileSync("./dist/big-dom-generator-v2.css", output);
 }
 
 let css;
 
 // Read the CSS file
 try {
-    css = fs.readFileSync('./dist/big-dom-generator-v1.css', 'utf-8');
+    css = fs.readFileSync("./dist/big-dom-generator-v1.css", "utf-8");
 } catch (error) {
-    console.error('An error occurred while reading the CSS file:', error);
+    console.error("An error occurred while reading the CSS file:", error);
     return; // Stop execution if file reading fails
 }
 
 try {
-    vary('.tree-area', ['isolation', 'isolate'], 'add');
+    vary(".tree-area", ["isolation", "isolate"], "add");
 } catch (error) {
-    console.error('An error occurred while varying the CSS:', error);
+    console.error("An error occurred while varying the CSS:", error);
 }
