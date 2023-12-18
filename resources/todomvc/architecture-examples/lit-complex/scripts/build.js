@@ -20,6 +20,7 @@ const options = {
     scriptsToLink: ["todo-item-extra-css.js", "todo-list-extra-css.js"],
     standaloneDirectory: path.resolve(__dirname, "..", "..", "lit"),
     complexDirectory: path.resolve(__dirname, ".."),
+    cssFilesToAddLinksFor: ["big-dom-generator-v2.css"],
 };
 
 buildComplex(options);

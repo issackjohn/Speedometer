@@ -11,6 +11,7 @@ const options = {
     filesToMove: ["node_modules/big-dom-generator/dist/big-dom-generator-v2.css", "node_modules/big-dom-generator/dist/logo.png", "node_modules/big-dom-generator/utils/app.css"],
     standaloneDirectory: path.resolve(__dirname, "..", "..", "svelte"),
     complexDirectory: path.resolve(__dirname, ".."),
+    cssFilesToAddLinksFor: ["big-dom-generator-v2.css"],
 };
 
 buildComplex(options);

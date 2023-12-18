@@ -13,6 +13,7 @@ const options = {
     cssFileNamePattern: /^styles.*\.css$/,
     standaloneDirectory: path.resolve(__dirname, "..", "..", "angular"),
     complexDirectory: path.resolve(__dirname, ".."),
+    cssFilesToAddLinksFor: ["big-dom-generator-v2.css"],
 };
 
 buildComplex(options);
