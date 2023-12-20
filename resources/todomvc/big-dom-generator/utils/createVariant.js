@@ -12,5 +12,5 @@ try {
     });
     fs.writeFileSync(OUTPUT_FILE_PATH, root.toString());
 } catch (error) {
-    console.error("An error occurred while processing the CSS:", error);
+    console.error("An error occurred while generating the big dom CSS variant:", error);
 }
