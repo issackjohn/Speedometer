@@ -137,6 +137,7 @@ body {
     align-items: center;
     padding: 5px;
     max-height: 50px;
+    z-index: 3;
 }
 
 .context-help-popover-body {
