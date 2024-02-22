@@ -24,7 +24,7 @@ export const Ribbon = () => {
             <ActionGroup>
                 <ActionItem className="reminder-group">
                     <ActionButton Icon={ClockIcon} label="Send Reminder" quiet />
-                    <ReminderPopOver />
+                    <ReminderPopOver className={"is-open"} />
                 </ActionItem>
                 <ActionItem className="backlog-group">
                     <ActionButton Icon={ViewListIcon} label="Backlog" quiet />
