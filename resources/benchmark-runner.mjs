@@ -24,6 +24,10 @@ class Page {
         this._frame = frame;
     }
 
+    getLocalStorage() {
+        return this._frame.contentWindow.localStorage;
+    }
+
     layout() {
         const body = this._frame.contentDocument.body.getBoundingClientRect();
         this.layout.e = document.elementFromPoint((body.width / 2) | 0, (body.height / 2) | 0);
@@ -64,6 +68,15 @@ class Page {
         if (element === null)
             return null;
         return this._wrapElement(element);
+    }
+
+    querySelectorInIframe(selector, path = []) {
+        const lookupStartNode = this._frame.contentDocument;
+        const element = getParent(lookupStartNode, path).querySelector(selector);
+
+        if (element === null)
+            return null;
+        return this._wrapElement(element.contentDocument);
     }
 
     /**
@@ -136,6 +149,10 @@ class PageElement {
         this.#node.click();
     }
 
+    setWidth(width) {
+        this.#node.width = width;
+    }
+
     focus() {
         this.#node.focus();
     }
@@ -183,6 +200,14 @@ class PageElement {
             eventOptions = Object.assign(eventOptions, options);
         const event = new contentWindow.MouseEvent(type, eventOptions);
         this.#node.dispatchEvent(event);
+    }
+
+    /**
+     * Scrolls the element into view.
+     *
+     */
+    scrollIntoView() {
+        this.#node.scrollIntoView();
     }
 
     /**
@@ -339,17 +364,29 @@ export class BenchmarkRunner {
         if (this._client?.willStartFirstIteration)
             await this._client.willStartFirstIteration(iterationCount);
 
+        try {
+            await this._runMultipleIterations();
+        } catch (error) {
+            console.error(error);
+            if (this._client?.handleError) {
+                await this._client.handleError(error);
+                return;
+            }
+        }
+
+        if (this._client?.didFinishLastIteration)
+            await this._client.didFinishLastIteration(this._metrics);
+    }
+
+    async _runMultipleIterations() {
         const iterationStartLabel = "iteration-start";
         const iterationEndLabel = "iteration-end";
-        for (let i = 0; i < iterationCount; i++) {
+        for (let i = 0; i < this._iterationCount; i++) {
             performance.mark(iterationStartLabel);
             await this._runAllSuites();
             performance.mark(iterationEndLabel);
             performance.measure(`iteration-${i}`, iterationStartLabel, iterationEndLabel);
         }
-
-        if (this._client?.didFinishLastIteration)
-            await this._client.didFinishLastIteration(this._metrics);
     }
 
     _removeFrame() {
@@ -402,15 +439,21 @@ export class BenchmarkRunner {
                 suites[j] = tmp;
             }
         }
-
         performance.mark(prepareEndLabel);
         performance.measure("runner-prepare", prepareStartLabel, prepareEndLabel);
 
-        for (const suite of suites) {
-            if (!suite.disabled)
-                await this._runSuite(suite);
-        }
+        try {
+            for (const suite of suites) {
+                if (!suite.disabled)
+                    await this._runSuite(suite);
+            }
 
+        } finally {
+            await this._finishRunAllSuites();
+        }
+    }
+
+    async _finishRunAllSuites() {
         const finalizeStartLabel = "runner-finalize-start";
         const finalizeEndLabel = "runner-finalize-end";
 
@@ -423,10 +466,11 @@ export class BenchmarkRunner {
     }
 
     async _runSuite(suite) {
-        const suitePrepareStartLabel = `suite-${suite.name}-prepare-start`;
-        const suitePrepareEndLabel = `suite-${suite.name}-prepare-end`;
-        const suiteStartLabel = `suite-${suite.name}-start`;
-        const suiteEndLabel = `suite-${suite.name}-end`;
+        const suiteName = suite.name;
+        const suitePrepareStartLabel = `suite-${suiteName}-prepare-start`;
+        const suitePrepareEndLabel = `suite-${suiteName}-prepare-end`;
+        const suiteStartLabel = `suite-${suiteName}-start`;
+        const suiteEndLabel = `suite-${suiteName}-end`;
 
         performance.mark(suitePrepareStartLabel);
         await this._prepareSuite(suite);
@@ -437,8 +481,18 @@ export class BenchmarkRunner {
             await this._runTestAndRecordResults(suite, test);
         performance.mark(suiteEndLabel);
 
-        performance.measure(`suite-${suite.name}-prepare`, suitePrepareStartLabel, suitePrepareEndLabel);
-        performance.measure(`suite-${suite.name}`, suiteStartLabel, suiteEndLabel);
+        performance.measure(`suite-${suiteName}-prepare`, suitePrepareStartLabel, suitePrepareEndLabel);
+        performance.measure(`suite-${suiteName}`, suiteStartLabel, suiteEndLabel);
+        this._validateSuiteTotal(suiteName);
+    }
+
+    _validateSuiteTotal(suiteName) {
+        // When the test is fast and the precision is low (for example with Firefox'
+        // privacy.resistFingerprinting preference), it's possible that the measured
+        // total duration for an entire is 0.
+        const suiteTotal = this._measuredValues.tests[suiteName].total;
+        if (suiteTotal === 0)
+            throw new Error(`Got invalid 0-time total for suite ${suiteName}: ${suiteTotal}`);
     }
 
     async _prepareSuite(suite) {
@@ -448,12 +502,11 @@ export class BenchmarkRunner {
                 await suite.prepare(this._page);
                 resolve();
             };
-            frame.src = `resources/${suite.url}`;
+            frame.src = `${suite.url}`;
         });
     }
 
     async _runTestAndRecordResults(suite, test) {
-        /* eslint-disable-next-line no-async-promise-executor */
         if (this._client?.willRunTest)
             await this._client.willRunTest(suite, test);
 
@@ -574,9 +627,9 @@ export class BenchmarkRunner {
             // Prepare all iteration metrics so they are listed at the end of
             // of the _metrics object, before "Total" and "Score".
             for (let i = 0; i < this._iterationCount; i++)
-                iterationTotalMetric(i);
-            getMetric("Geomean");
-            getMetric("Score", "score");
+                iterationTotalMetric(i).description = `Test totals for iteration ${i}`;
+            getMetric("Geomean", "ms").description = "Geomean of test totals";
+            getMetric("Score", "score").description = "Scaled inverse of the Geomean";
         }
 
         const geomean = getMetric("Geomean");
