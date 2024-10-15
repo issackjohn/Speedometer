@@ -17,6 +17,8 @@ class MainBenchmarkClient {
     _hasResults = false;
     _developerModeContainer = null;
     _metrics = Object.create(null);
+    _steppingPromise = null;
+    _steppingResolver = null;
 
     constructor() {
         window.addEventListener("DOMContentLoaded", () => this.prepareUI());
@@ -24,8 +26,39 @@ class MainBenchmarkClient {
     }
 
     start() {
-        if (this._startBenchmark())
+        if (this._isStepping())
+            this._clearStepping();
+        else if (this._startBenchmark())
             this._showSection("#running");
+    }
+
+    step() {
+        const currentSteppingResolver = this._steppingResolver;
+        this._steppingPromise = new Promise((resolve) => {
+            this._steppingResolver = resolve;
+        });
+        if (this._isStepping())
+            currentSteppingResolver();
+        if (!this._isRunning) {
+            this._startBenchmark();
+            this._showSection("#running");
+        }
+    }
+
+    _clearStepping() {
+        const currentSteppingResolver = this._steppingResolver;
+        this._steppingPromise = null;
+        this._steppingResolver = null;
+        currentSteppingResolver();
+    }
+
+    async _awaitNextStep(suite, test) {
+        console.log(`Next Step: ${suite.name} ${test.name}`, { suite, test });
+        await this._steppingPromise;
+    }
+
+    _isStepping() {
+        return this._steppingResolver !== null;
     }
 
     _startBenchmark() {
@@ -44,8 +77,8 @@ class MainBenchmarkClient {
 
             return false;
         }
-
-        this._developerModeContainer?.remove();
+        if (!this._isStepping())
+            this._developerModeContainer?.remove();
         this._progressCompleted = document.getElementById("progress-completed");
         if (params.iterationCount < 50) {
             const progressNode = document.getElementById("progress");
@@ -81,9 +114,11 @@ class MainBenchmarkClient {
         frame.style.transform = "translate(-50%, -50%)";
     }
 
-    willRunTest(suite, test) {
+    async willRunTest(suite, test) {
         document.getElementById("info-label").textContent = suite.name;
         document.getElementById("info-progress").textContent = `${this._finishedTestCount} / ${this.stepCount}`;
+        if (this._steppingPromise)
+            await this._awaitNextStep(suite, test);
     }
 
     didRunTest() {
@@ -107,17 +142,40 @@ class MainBenchmarkClient {
         this._metrics = metrics;
 
         const scoreResults = this._computeResults(this._measuredValuesList, "score");
-        this._updateGaugeNeedle(scoreResults.mean);
-        document.getElementById("result-number").textContent = scoreResults.formattedMean;
-        if (scoreResults.formattedDelta)
-            document.getElementById("confidence-number").textContent = `\u00b1 ${scoreResults.formattedDelta}`;
+        if (scoreResults.isValid)
+            this._populateValidScore(scoreResults);
+        else
+            this._populateInvalidScore();
 
         this._populateDetailedResults(metrics);
-
         if (params.developerMode)
             this.showResultsDetails();
         else
             this.showResultsSummary();
+    }
+
+    handleError(error) {
+        console.assert(this._isRunning);
+        this._isRunning = false;
+        this._hasResults = true;
+        this._metrics = Object.create(null);
+        this._populateInvalidScore();
+        this.showResultsSummary();
+    }
+
+    _populateValidScore(scoreResults) {
+        document.getElementById("summary").className = "valid";
+
+        this._updateGaugeNeedle(scoreResults.mean);
+        document.getElementById("result-number").textContent = scoreResults.formattedMean;
+        if (scoreResults.formattedDelta)
+            document.getElementById("confidence-number").textContent = `\u00b1 ${scoreResults.formattedDelta}`;
+    }
+
+    _populateInvalidScore() {
+        document.getElementById("summary").className = "invalid";
+        document.getElementById("result-number").textContent = "Error";
+        document.getElementById("confidence-number").textContent = "";
     }
 
     _computeResults(measuredValuesList, displayUnit) {
@@ -137,9 +195,7 @@ class MainBenchmarkClient {
         }
 
         const values = measuredValuesList.map(valueForUnit);
-        const sum = values.reduce((a, b) => {
-            return a + b;
-        }, 0);
+        const sum = values.reduce((a, b) => a + b, 0);
         const arithmeticMean = sum / values.length;
         let meanSigFig = 4;
         let formattedDelta;
@@ -162,6 +218,7 @@ class MainBenchmarkClient {
             formattedMean: formattedMean,
             formattedDelta: formattedDelta,
             formattedMeanAndDelta: formattedMean + (formattedDelta ? ` \xb1 ${formattedDelta} (${formattedPercentDelta})` : ""),
+            isValid: values.length > 0 && isFinite(sum) && sum > 0,
         };
     }
 

@@ -222,14 +222,20 @@ function createUIForSuites() {
 }
 
 function createUIForRun() {
-    let button = document.createElement("button");
-    button.textContent = "Start Test";
-    button.onclick = (event) => {
+    const stepTestButton = document.createElement("button");
+    stepTestButton.textContent = "Step Test \u23EF";
+    stepTestButton.onclick = (event) => {
+        globalThis.benchmarkClient.step();
+    };
+    const startTestButton = document.createElement("button");
+    startTestButton.textContent = "Start Test \u23F5";
+    startTestButton.onclick = (event) => {
         globalThis.benchmarkClient.start();
     };
-    let buttons = document.createElement("div");
+    const buttons = document.createElement("div");
     buttons.className = "button-bar";
-    buttons.appendChild(button);
+    buttons.appendChild(stepTestButton);
+    buttons.appendChild(startTestButton);
     return buttons;
 }
 
@@ -240,13 +246,10 @@ function updateURL() {
     // to comma separate only the selected
     const selectedSuites = Suites.filter((suite) => !suite.disabled);
 
-    if (!selectedSuites.length) {
-        url.searchParams.delete("tags");
-        url.searchParams.delete("suites");
-        url.searchParams.delete("suite");
-    } else {
-        url.searchParams.delete("tags");
-        url.searchParams.delete("suite");
+    url.searchParams.delete("tags");
+    url.searchParams.delete("suites");
+    url.searchParams.delete("suite");
+    if (selectedSuites.length) {
         // Try finding common tags that would result in the current suite selection.
         let commonTags = new Set(selectedSuites[0].tags);
         for (const suite of Suites) {
@@ -255,26 +258,18 @@ function updateURL() {
             else
                 commonTags = new Set(suite.tags.filter((tag) => commonTags.has(tag)));
         }
-        if (commonTags.size) {
+        if (selectedSuites.length > 1 && commonTags.size) {
             const tags = [...commonTags][0];
-            if (tags === "default")
-                url.searchParams.delete("tags");
-            else
+            if (tags !== "default")
                 url.searchParams.set("tags", tags);
             url.searchParams.delete("suites");
         } else {
-            url.searchParams.delete("tags");
             url.searchParams.set("suites", selectedSuites.map((suite) => suite.name).join(","));
         }
     }
 
-    if (params.measurementMethod !== "raf")
-        url.searchParams.set("measurementMethod", "timer");
-    else
-        url.searchParams.delete("measurementMethod");
-
-    const boolParamKeys = ["iterationCount", "useWarmupSuite", "warmupBeforeSync", "waitBeforeSync"];
-    for (const paramKey of boolParamKeys) {
+    const defaultParamKeys = ["measurementMethod", "iterationCount", "useWarmupSuite", "warmupBeforeSync", "waitBeforeSync"];
+    for (const paramKey of defaultParamKeys) {
         if (params[paramKey] !== defaultParams[paramKey])
             url.searchParams.set(paramKey, params[paramKey]);
         else
