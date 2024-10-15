@@ -364,9 +364,6 @@ export class BenchmarkRunner {
         if (this._client?.willStartFirstIteration)
             await this._client.willStartFirstIteration(iterationCount);
 
-        if (this._client?.didFinishLastIteration)
-            await this._client.didFinishLastIteration(this._metrics);
-
         const iterationStartLabel = "iteration-start";
         const iterationEndLabel = "iteration-end";
         for (let i = 0; i < iterationCount; i++) {
@@ -430,6 +427,7 @@ export class BenchmarkRunner {
                 suites[j] = tmp;
             }
         }
+
         performance.mark(prepareEndLabel);
         performance.measure("runner-prepare", prepareStartLabel, prepareEndLabel);
 
@@ -480,6 +478,7 @@ export class BenchmarkRunner {
     }
 
     async _runTestAndRecordResults(suite, test) {
+        /* eslint-disable-next-line no-async-promise-executor */
         if (this._client?.willRunTest)
             await this._client.willRunTest(suite, test);
 
