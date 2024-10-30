@@ -1107,7 +1107,6 @@ Suites.push({
     tags: ["responsive-design", "webcomponents"],
     async prepare(page) {
         (await page.waitForElement("#content-iframe")).focus();
-        console.log("focused");
     },
     tests: [
         new BenchmarkTestStep("Load chat", (page) => {
