@@ -1119,11 +1119,10 @@ Suites.push({
         }),
         new BenchmarkTestStep("Reduce size in steps", (page) => {
             const iframe = page.querySelector("#content-iframe");
-            const widths = [800, 736, 672, 608, 544, 480];
+            const widths = [768, 704, 640, 560, 480];
 
             widths.forEach(width => {
                 iframe.setWidth(`${width}px`);
-                console.log(`Resized to ${width}px`);
                 page.layout(); // Call layout after each resize
             });
         }),
@@ -1136,8 +1135,14 @@ Suites.push({
             chatInput.dispatchEvent("input");
             chatInput.enter("keypress");
         }),
-        new BenchmarkTestStep("Resize to horizontal mobile layout", (page) => {
-            page.querySelector("#content-iframe").setWidth("768px");
+        new BenchmarkTestStep("Resize to horizontal mobile layout in steps", (page) => {
+            const iframe = page.querySelector("#content-iframe");
+            const widths = [560, 640, 704, 768, 800];
+
+            widths.forEach(width => {
+                iframe.setWidth(`${width}px`);
+                page.layout(); // Call layout after each resize
+            });
         }),
     ],
 });
