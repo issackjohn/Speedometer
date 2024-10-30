@@ -1117,8 +1117,15 @@ Suites.push({
             const seeMoreBtn = iframeElement.querySelectorInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid", "recipe-card"]);
             seeMoreBtn.click();
         }),
-        new BenchmarkTestStep("Reduce size", (page) => {
-            page.querySelector("#content-iframe").setWidth("480px");
+        new BenchmarkTestStep("Reduce size in steps", (page) => {
+            const iframe = page.querySelector("#content-iframe");
+            const widths = [800, 736, 672, 608, 544, 480];
+
+            widths.forEach(width => {
+                iframe.setWidth(`${width}px`);
+                console.log(`Resized to ${width}px`);
+                page.layout(); // Call layout after each resize
+            });
         }),
         new BenchmarkTestStep("Open chat and send message", (page) => {
             const iframeElement = page.querySelectorInIframe("#content-iframe");
