@@ -1135,7 +1135,7 @@ Suites.push({
             page.layout();
 
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
-            chatInput.setValue("Please generate an image of Beef Stroganoff.");
+            chatInput.setValue("Please generate an image of Tomato Soup.");
             chatInput.dispatchEvent("input");
             chatInput.enter("keydown");
             page.layout();
