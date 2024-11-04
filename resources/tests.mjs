@@ -1109,38 +1109,44 @@ Suites.push({
         (await page.waitForElement("#content-iframe")).focus();
     },
     tests: [
-        new BenchmarkTestStep("Load chat", (page) => {
+        new BenchmarkTestStep("LoadChatAndExpandRecipe", (page) => {
             const iframeElement = page.querySelectorInIframe("#content-iframe");
-            const element = iframeElement.querySelectorInShadowRoot("#load-chat-btn", ["cooking-app", "chat-window"]);
-            element.click();
-            const seeMoreBtn = iframeElement.querySelectorInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid", "recipe-card"]);
-            seeMoreBtn.click();
+            const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
+            resumePreviousChatBtn.click();
+            page.layout();
+
+            const showMoreBtn = iframeElement.querySelectorInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid", "recipe-card"]);
+            showMoreBtn.click();
+            page.layout();
         }),
-        new BenchmarkTestStep("Reduce size in steps", (page) => {
+        new BenchmarkTestStep("ReduceWidthIn5Steps", (page) => {
             const iframe = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
 
-            widths.forEach(width => {
+            widths.forEach((width) => {
                 iframe.setWidth(`${width}px`);
-                page.layout(); // Call layout after each resize
+                page.layout();
             });
         }),
-        new BenchmarkTestStep("Open chat and send message", (page) => {
+        new BenchmarkTestStep("ScrollToChatAndSendMessage", (page) => {
             const iframeElement = page.querySelectorInIframe("#content-iframe");
             const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView();
+            page.layout();
+
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
             chatInput.setValue("Please generate an image of Beef Stroganoff.");
             chatInput.dispatchEvent("input");
-            chatInput.enter("keypress");
+            chatInput.enter("keydown");
+            page.layout();
         }),
-        new BenchmarkTestStep("Resize to horizontal mobile layout in steps", (page) => {
+        new BenchmarkTestStep("IncreaseWidthIn5Steps", (page) => {
             const iframe = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
 
-            widths.forEach(width => {
+            widths.forEach((width) => {
                 iframe.setWidth(`${width}px`);
-                page.layout(); // Call layout after each resize
+                page.layout();
             });
         }),
     ],
