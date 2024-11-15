@@ -62,13 +62,13 @@ class Page {
      * @param {string[]} [path] An array containing a path to the parent element.
      * @returns PageElement | null
      */
-    querySelector(selector, path = []) {
-        const lookupStartNode = this._frame.contentDocument;
+    querySelector(selector, path = [], inIframe = false) {
+        const lookupStartNode = inIframe ? this._frame.contentDocument : this._frame.contentDocument;
         const element = getParent(lookupStartNode, path).querySelector(selector);
 
         if (element === null)
             return null;
-        return this._wrapElement(element);
+        return this._wrapElement(inIframe ? element.contentDocument : element);
     }
 
     /**
@@ -147,6 +147,14 @@ class PageElement {
 
     getElementByMethod(name) {
         return new PageElement(this.#node[name]());
+    }
+
+    setWidth(width) {
+        this.#node.width = width;
+    }
+
+    scrollIntoView() {
+        this.#node.scrollIntoView();
     }
 
     dispatchEvent(eventName, options = NATIVE_OPTIONS, eventType = Event) {
