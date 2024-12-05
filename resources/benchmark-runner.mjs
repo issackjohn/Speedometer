@@ -150,7 +150,7 @@ class PageElement {
     }
 
     setWidth(width) {
-        this.#node.width = width;
+        this.#node.style.width = width;
     }
 
     scrollIntoView() {
