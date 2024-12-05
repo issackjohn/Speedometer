@@ -1145,7 +1145,7 @@ Suites.push({
             element.scrollIntoView();
             page.layout();
 
-            const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Please generate an image of Chicken Soup.", "Please generate an image of Beef Soup."];
+            const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
             for (const message of messagesToBeSent) {
