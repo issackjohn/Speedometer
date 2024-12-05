@@ -1109,7 +1109,7 @@ Suites.push({
         (await page.waitForElement("#content-iframe")).focus();
     },
     tests: [
-        new BenchmarkTestStep("LoadChatAndExpandRecipe", (page) => {
+        new BenchmarkTestStep("LoadChatAndExpandRecipes", (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
             const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
