@@ -1115,9 +1115,12 @@ Suites.push({
             resumePreviousChatBtn.click();
             page.layout();
 
-            const showMoreBtn = iframeElement.querySelectorInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid", "recipe-card"]);
-            showMoreBtn.click();
-            page.layout();
+            // Expand recipes
+            const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
+            for (const btn of showMoreBtn){
+                btn.click();
+                page.layout();
+            }
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", (page) => {
             const iframeElement = page.querySelector("#content-iframe");
@@ -1129,17 +1132,17 @@ Suites.push({
             });
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessage", (page) => {
-            const iframeElement = page.querySelector("#content-iframe", [], true);
-            const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
-            element.scrollIntoView();
-            page.layout();
-
+            // Collapse recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            // the will collapse the first element which was expanded in the LoadChatAndExpandRecipe step but expand the rest
             for (const btn of showMoreBtn){
                 btn.click();
                 page.layout();
             }
+
+            const iframeElement = page.querySelector("#content-iframe", [], true);
+            const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
+            element.scrollIntoView();
+            page.layout();
 
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
             chatInput.setValue("Please generate an image of Tomato Soup.");
