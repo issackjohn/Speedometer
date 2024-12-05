@@ -1134,6 +1134,13 @@ Suites.push({
             element.scrollIntoView();
             page.layout();
 
+            const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
+            // the will collapse the first element which was expanded in the LoadChatAndExpandRecipe step but expand the rest
+            for (const btn of showMoreBtn){
+                btn.click();
+                page.layout();
+            }
+
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
             chatInput.setValue("Please generate an image of Tomato Soup.");
             chatInput.dispatchEvent("input");
