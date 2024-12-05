@@ -1117,7 +1117,7 @@ Suites.push({
 
             // Expand recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            for (const btn of showMoreBtn){
+            for (const btn of showMoreBtn) {
                 btn.click();
                 page.layout();
             }
@@ -1132,23 +1132,28 @@ Suites.push({
             });
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessage", (page) => {
+            const iframeElement = page.querySelector("#content-iframe", [], true);
+
             // Collapse recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            for (const btn of showMoreBtn){
+            for (const btn of showMoreBtn) {
                 btn.click();
                 page.layout();
             }
 
-            const iframeElement = page.querySelector("#content-iframe", [], true);
             const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView();
             page.layout();
 
+            const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Please generate an image of Chicken Soup.", "Please generate an image of Beef Soup."];
+
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
-            chatInput.setValue("Please generate an image of Tomato Soup.");
-            chatInput.dispatchEvent("input");
-            chatInput.enter("keydown");
-            page.layout();
+            for (const message of messagesToBeSent) {
+                chatInput.setValue(message);
+                chatInput.dispatchEvent("input");
+                chatInput.enter("keydown");
+                page.layout();
+            }
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", (page) => {
             const iframeElement = page.querySelector("#content-iframe");
