@@ -1131,7 +1131,7 @@ Suites.push({
                 page.layout();
             });
         }),
-        new BenchmarkTestStep("ScrollToChatAndSendMessage", (page) => {
+        new BenchmarkTestStep("ScrollToChatAndSendMessages", (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
 
             // Collapse recipes
