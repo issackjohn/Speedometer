@@ -13,23 +13,24 @@ export class AppRibbon extends LightDOMLitElement {
         super();
         this.buttons = ribbonButtons;
         this.visibleButtons = this.buttons;
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
-        this.resizeObserver = new ResizeObserver((entries) => {
+        this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
-                const width = entry.contentRect.width;
-                this._updateVisibleButtons(width);
+                if (entry.contentBoxSize && entry.contentBoxSize[0])
+                    this._updateVisibleButtons(entry.contentBoxSize[0].inlineSize);
+                else
+                    this._updateVisibleButtons(entry.contentRect.width);
             }
         });
-        this.resizeObserver.observe(this);
+    }
+
+    firstUpdated() {
+        this._resizeObserver.observe(this);
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
-        if (this.resizeObserver)
-            this.resizeObserver.disconnect();
+        if (this._resizeObserver)
+            this._resizeObserver.disconnect();
     }
 
     _updateVisibleButtons(width) {

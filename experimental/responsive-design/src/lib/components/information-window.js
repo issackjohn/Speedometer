@@ -16,6 +16,16 @@ class InformationWindow extends LitElement {
         this.restaurants = restaurants;
         this._isChatExpanded = true;
         this._currentIndex = 0;
+        this._resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.contentBoxSize && entry.contentBoxSize[0])
+                    this._isChatExpanded = entry.contentBoxSize[0].blockSize > 350;
+                else
+                    this._isChatExpanded = entry.contentRect.height > 350;
+                this._currentIndex = 0;
+                this.updateCarousel();
+            }
+        });
     }
 
     connectedCallback() {
@@ -24,34 +34,15 @@ class InformationWindow extends LitElement {
     }
 
     firstUpdated() {
-        if (this.chatWindow)
-            this.setupResizeObserver();
-    }
-
-    setupResizeObserver() {
-        if (this.resizeObserver)
-            this.resizeObserver.disconnect();
-
         const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
-        if (chatWindowInner) {
-            this.resizeObserver = new ResizeObserver((entries) => {
-                for (const entry of entries) {
-                    const height = entry.contentRect.height;
-                    this._isChatExpanded = height > 350;
-                    this._currentIndex = 0;
-                    this.updateCarousel();
-                    this.requestUpdate();
-                }
-            });
-
-            this.resizeObserver.observe(chatWindowInner);
-        }
+        if (chatWindowInner)
+            this._resizeObserver.observe(chatWindowInner);
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
-        if (this.resizeObserver && this.chatWindow)
-            this.resizeObserver.unobserve(this.chatWindow);
+        if (this._resizeObserver)
+            this._resizeObserver.disconnect();
     }
 
     handleChatResize(event) {
