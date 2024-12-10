@@ -39,8 +39,8 @@ class RecipeCarousel extends LightDOMLitElement {
     _getCarouselItemsTemplate() {
         return this.carouselItems.map(
             (item) => html`
-                <div class="mr-4 h-36 w-1/3 flex-none snap-center overflow-hidden rounded-lg">
-                    <img src="${item.image}" alt="${item.alt}" class="h-full w-44 rounded-t-lg object-cover drop-shadow-xl" />
+                <div class="mr-4 h-36 w-1/2 md:w-1/3 lg:w-1/4 flex-none snap-center overflow-hidden rounded-lg">
+                    <img src="${item.image}" alt="${item.alt}" class="h-full w-full rounded-t-lg object-cover drop-shadow-xl" />
                 </div>
             `
         );
