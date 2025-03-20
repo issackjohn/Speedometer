@@ -11,9 +11,8 @@ export default {
     input: "src/app.js",
     output: [
         {
-            file: "dist/app.js",
+            file: "dist/bundle.js",
             format: "es",
-            name: "app",
             plugins: [terser()],
         },
     ],
