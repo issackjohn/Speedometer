@@ -21,6 +21,18 @@ export class AppRibbon extends LightDOMLitElement {
                     this._updateVisibleButtons(entry.contentRect.width);
             }
         });
+        this._breakpoints = [
+            { minWidth: 1134, buttons: 12 },
+            { minWidth: 1069, buttons: 11 },
+            { minWidth: 985, buttons: 10 },
+            { minWidth: 905, buttons: 9 },
+            { minWidth: 818, buttons: 8 },
+            { minWidth: 735, buttons: 7 },
+            { minWidth: 660, buttons: 6 },
+            { minWidth: 540, buttons: 5 },
+            { minWidth: 440, buttons: 4 },
+            { minWidth: 318, buttons: 3 },
+        ];
     }
 
     firstUpdated() {
@@ -34,20 +46,7 @@ export class AppRibbon extends LightDOMLitElement {
     }
 
     _updateVisibleButtons(width) {
-        const breakpoints = [
-            { minWidth: 1134, buttons: 12 },
-            { minWidth: 1069, buttons: 11 },
-            { minWidth: 985, buttons: 10 },
-            { minWidth: 905, buttons: 9 },
-            { minWidth: 818, buttons: 8 },
-            { minWidth: 735, buttons: 7 },
-            { minWidth: 660, buttons: 6 },
-            { minWidth: 540, buttons: 5 },
-            { minWidth: 440, buttons: 4 },
-            { minWidth: 318, buttons: 3 },
-        ];
-
-        const breakpoint = breakpoints.find((bp) => width >= bp.minWidth);
+        const breakpoint = this._breakpoints.find((bp) => width >= bp.minWidth);
         this.visibleButtons = breakpoint ? this.buttons.slice(0, breakpoint.buttons) : this.buttons.slice(0, 2);
         this.requestUpdate();
     }
