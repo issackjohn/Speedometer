@@ -9,8 +9,9 @@
     },
     "main": "index.js",
     "scripts": {
-        "serve": "web-dev-server",
-        "prebuild": "npm run build:main-css && npm run build:chat-window-css",
+        "serve": "web-dev-server --app-index dist/index.html",
+        "clean": "rimraf dist",
+        "prebuild": "npm run clean && npm run build:main-css && npm run build:chat-window-css",
         "build": "rollup --config rollup.config.js",
         "build:main-css": "npx tailwindcss -i ./src/input.css -o ./src/tailwind.generated.css --minify",
         "build:chat-window-css": "npx tailwindcss -c ./tailwind.chat-window.config.js -i ./src/input.css -o ./src/tailwind.chat-window.generated.css --minify",
@@ -20,7 +21,7 @@
         "dev:rollup": "rollup --config rollup.config.js --watch",
         "dev:serve": "web-dev-server --watch",
         "lint:check": "eslint **/*.{js,mjs,jsx,ts,tsx}",
-        "lint:fix": "eslint \"**/*.{js,mjs,jsx,ts,tsx}\" --fix",
+        "lint:fix": "npm run lint:check -- --fix",
         "pretty:check": "prettier --check ./",
         "pretty:fix": "prettier --write ./",
         "format": "npm run pretty:fix && npm run lint:fix",
@@ -30,20 +31,22 @@
         "lit": "^3.2.1"
     },
     "devDependencies": {
-        "@rollup/plugin-html": "^1.0.4",
-        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-html": "^1.1.0",
+        "@rollup/plugin-node-resolve": "^15.3.1",
         "@rollup/plugin-terser": "^0.4.4",
-        "@web/dev-server": "0.4.3",
+        "@web/dev-server": "^0.4.3",
         "concurrently": "^9.0.1",
-        "eslint": "^8.57.0",
+        "eslint": "^8.57.1",
+        "eslint-plugin-lit": "^2.0.0",
         "postcss": "^8.4.40",
-        "prettier": "^3.3.3",
-        "prettier-plugin-tailwindcss": "^0.6.8",
-        "rollup": "^4.24.0",
+        "prettier": "^3.5.3",
+        "prettier-plugin-tailwindcss": "^0.6.11",
+        "rimraf": "^5.0.5",
+        "rollup": "^4.36.0",
         "rollup-plugin-copy": "^3.5.0",
-        "rollup-plugin-import-css": "^3.5.6",
+        "rollup-plugin-import-css": "^3.5.8",
         "rollup-plugin-postcss": "^4.0.2",
         "rollup-plugin-summary": "^3.0.0",
-        "tailwindcss": "^3.4.14"
+        "tailwindcss": "^3.4.17"
     }
 }
