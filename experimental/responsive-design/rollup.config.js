@@ -7,19 +7,23 @@ import summary from "rollup-plugin-summary";
 import path from "path";
 import fs from "fs";
 
+const production = !process.env.ROLLUP_WATCH;
+
 export default {
     input: "src/app.js",
     output: [
         {
-            file: "dist/app.js",
+            file: "dist/bundle.js",
             format: "es",
-            name: "app",
-            plugins: [terser()],
+            sourcemap: !production,
+            plugins: [production && terser()].filter(Boolean),
         },
     ],
     plugins: [
         resolve(),
-        css(),
+        css({
+            minify: production,
+        }),
         html({
             template: () => {
                 const imagesDir = path.resolve("public", "images");

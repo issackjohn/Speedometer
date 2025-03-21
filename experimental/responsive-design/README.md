@@ -4,13 +4,13 @@ A single-page cooking website built with [Lit](https://lit.dev/) and [Tailwind C
 
 ## Table of Contents
 
--   [Introduction](#introduction)
--   [Installation](#installation)
--   [Usage](#usage)
--   [Production](#production)
--   [Project Structure](#project-structure)
--   [Components](#components)
--   [Data Sources](#data-sources)
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Production](#production)
+- [Project Structure](#project-structure)
+- [Components](#components)
+- [Data Sources](#data-sources)
 
 ## Introduction
 
@@ -34,7 +34,7 @@ npm run dev
 
 The script above runs the following commands concurrently, scanning your template files for classes, build your CSS, and launch the development server:
 
--   Tailwind CSS for Main Styles:
+- Tailwind CSS for Main Styles:
 
     ```bash
     npm run dev:main-css
@@ -42,7 +42,7 @@ The script above runs the following commands concurrently, scanning your templat
 
     Compiles input.css into tailwind.generated.css and watches for changes.
 
--   Tailwind CSS for Chat Window Styles:
+- Tailwind CSS for Chat Window Styles:
 
     ```bash
     npm run dev:chat-window-css
@@ -50,7 +50,7 @@ The script above runs the following commands concurrently, scanning your templat
 
     Compiles styles specific to the chat window into tailwind.chat-window.generated.css.
 
--   Rollup watch
+- Rollup watch
 
     ```bash
     npm run dev:rollup
@@ -58,7 +58,7 @@ The script above runs the following commands concurrently, scanning your templat
 
     Bundles the JavaScript files using Rollup and watches for changes.
 
--   Development Server
+- Development Server
     ```bash
     npm run dev:serve
     ```
@@ -77,9 +77,9 @@ npm run serve
 
 The command will:
 
--   Compile and minify the CSS files.
--   Bundle and minify JavaScript files using Rollup.
--   Copy necessary assets to the `dist/` directory.
+- Compile and minify the CSS files.
+- Bundle and minify JavaScript files using Rollup.
+- Copy necessary assets to the `dist/` directory.
 
 ## Project Structure
 

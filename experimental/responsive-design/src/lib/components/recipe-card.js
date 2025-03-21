@@ -35,9 +35,9 @@ class RecipeCard extends LightDOMLitElement {
     _getStepsTemplate() {
         return this.recipe.steps.map(
             (step, index) => html`
-                <li class="flex items-center space-x-2 text-xs">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-orange-200 font-bold text-orange-800">${index + 1}</span>
-                    <span>${step}</span>
+                <li class="mb-2 flex items-center space-x-2 text-xs">
+                    <span class="flex h-5 w-5 items-center justify-center rounded-full bg-orange-100 font-bold text-orange-800">${index + 1}</span>
+                    <span class="ml-1">${step}</span>
                 </li>
             `
         );
@@ -45,16 +45,16 @@ class RecipeCard extends LightDOMLitElement {
 
     _getExpandedTemplate() {
         return html`
-            <div class="flex justify-between p-2">
+            <div class="mx-2 mb-2 grid grid-cols-2 gap-3 rounded-md bg-white p-3 shadow-sm">
                 <div>
-                    <h4 class="text-xs font-semibold text-gray-700">Ingredients:</h4>
-                    <ul class="list-inside list-disc space-y-1 pl-4 text-xs text-gray-600">
-                        ${this.recipe.ingredients.map((ingredient) => html`<li>${ingredient}</li>`)}
+                    <h4 class="mb-2 text-xs font-semibold text-gray-800">Ingredients:</h4>
+                    <ul class="space-y-1 pl-1 text-xs text-gray-700">
+                        ${this.recipe.ingredients.map((ingredient) => html`<li class="flex items-center"><span class="mr-2 h-1 w-1 rounded-full bg-orange-400"></span>${ingredient}</li>`)}
                     </ul>
                 </div>
-                <div class="text-xs">
-                    <h4 class="font-semibold text-gray-700">Steps:</h4>
-                    <ol class="list-inside list-decimal space-y-1 pl-4 text-gray-600">
+                <div>
+                    <h4 class="mb-2 text-xs font-semibold text-gray-800">Steps:</h4>
+                    <ol class="space-y-1 pl-1 text-gray-700">
                         ${this._getStepsTemplate()}
                     </ol>
                 </div>
@@ -64,22 +64,20 @@ class RecipeCard extends LightDOMLitElement {
 
     render() {
         return html`
-            <div class="row-span-6 grid grid-rows-subgrid rounded-lg bg-gradient-to-br from-blue-50 to-green-50 text-left shadow-md">
-                <img src="${this.recipe.image}" alt="${this.recipe.text}" class="row-start-1 h-24 w-full rounded-t-lg object-cover" />
-                <h3 class="row-start-2 px-1 text-sm">${this.recipe.text}</h3>
-                <div class="row-start-3 flex max-w-40 justify-between px-2 pb-2 pt-0.5 text-xs text-gray-400">
-                    <p>${this.recipe.time}</p>
-                    |
-                    <p>${this.recipe.calories}</p>
-                    |
-                    <p>${this.recipe.servingSize}</p>
+            <div class="row-span-6 grid grid-rows-subgrid overflow-hidden rounded-lg border border-gray-100 bg-gradient-to-br from-blue-50 to-green-50 text-left shadow-md">
+                <img src="${this.recipe.image}" alt="${this.recipe.text}" class="row-start-1 h-32 w-full object-cover" />
+                <h3 class="row-start-2 px-2 py-2 text-sm font-medium text-gray-800">${this.recipe.text}</h3>
+                <div class="row-start-3 flex justify-between px-2 pb-2 text-xs font-medium text-gray-500">
+                    <p class="flex items-center"><span class="mr-1 inline-block h-1 w-1 rounded-full bg-gray-400"></span>${this.recipe.time}</p>
+                    <p class="flex items-center"><span class="mr-1 inline-block h-1 w-1 rounded-full bg-gray-400"></span>${this.recipe.calories}</p>
+                    <p class="flex items-center"><span class="mr-1 inline-block h-1 w-1 rounded-full bg-gray-400"></span>${this.recipe.servingSize}</p>
                 </div>
                 <p class="row-start-4 truncate text-pretty px-2 py-1 text-xs text-gray-600">${this.recipe.description}</p>
                 <div class="absolute -top-4 left-0 right-0 flex justify-center space-x-2 p-2">
                     ${this.recipe.tags.map((tag) => html`<span class="inline-flex items-center rounded-md bg-orange-100 px-1 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-orange-500/10">${tag}</span> `)}
                 </div>
                 ${this.isExpanded ? this._getExpandedTemplate() : ""}
-                <button @click="${this._toggleExpand}" class="show-more-btn w-28 justify-self-end border-none bg-transparent p-1 text-sm text-blue-400 hover:text-blue-900">${this.isExpanded ? "Show Less" : "Show More..."}</button>
+                <button @click="${this._toggleExpand}" class="show-more-btn w-full justify-self-end border-t border-gray-100 bg-gray-50 py-1 text-xs font-medium text-blue-600">${this.isExpanded ? "Show Less" : "Show More Details"}</button>
             </div>
         `;
     }
