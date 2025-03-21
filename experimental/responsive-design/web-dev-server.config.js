@@ -2,6 +2,6 @@
 export default {
     open: true,
     nodeResolve: true,
-    watch: false,
-    appIndex: "/dist/index.html",
+    watch: true,
+    appIndex: "index.html",
 };
