@@ -69,6 +69,6 @@ export default [
                 sourceType: "module",
             },
         },
-        ignores: ["dist/**/*", "src/tailwind.generated.css", "src/tailwind.chat-window.generated.css"],
+        ignores: ["dist/**/*", "dev-dist/**/*", "src/tailwind.generated.css", "src/tailwind.chat-window.generated.css"],
     },
 ];

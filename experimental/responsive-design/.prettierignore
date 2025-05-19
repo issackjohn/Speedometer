@@ -1,4 +1,5 @@
 src/tailwind.generated.css
 src/tailwind.chat-window.generated.css
 dist/
+dev-dist/
 
