@@ -19,11 +19,6 @@
         "dev:chat-window-css": "npx tailwindcss -c ./tailwind.chat-window.config.js -i ./src/input.css -o ./src/tailwind.chat-window.generated.css --watch",
         "dev:rollup": "rollup --config rollup.config.js --watch",
         "dev:serve": "web-dev-server --config web-dev-server.dev.config.mjs",
-        "lint:check": "eslint **/*.{js,mjs,jsx,ts,tsx}",
-        "lint:fix": "eslint \"**/*.{js,mjs,jsx,ts,tsx}\" --fix",
-        "pretty:check": "prettier --check ./",
-        "pretty:fix": "prettier --write ./",
-        "format": "npm run pretty:fix && npm run lint:fix",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
