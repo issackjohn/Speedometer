@@ -1150,6 +1150,8 @@ Suites.push({
             widths.forEach((width) => {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
+                page.layout();
+                page.layout();
             });
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", (page) => {
@@ -1191,6 +1193,8 @@ Suites.push({
 
             widths.forEach((width) => {
                 iframeElement.setWidth(`${width}px`);
+                page.layout();
+                page.layout();
                 page.layout();
             });
         }),
