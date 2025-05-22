@@ -23,7 +23,8 @@ export class AppRibbon extends LightDOMLitElement {
         });
     }
 
-    firstUpdated() {
+    connectedCallback() {
+        super.connectedCallback();
         this._resizeObserver.observe(this);
     }
 

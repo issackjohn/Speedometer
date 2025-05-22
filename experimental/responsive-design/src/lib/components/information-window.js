@@ -31,12 +31,12 @@ class InformationWindow extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         adoptStyles(this.shadowRoot, [chatWindowStyles]);
-    }
 
-    firstUpdated() {
-        const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
-        if (chatWindowInner)
-            this._resizeObserver.observe(chatWindowInner);
+        if (this.chatWindow) {
+            const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
+            if (chatWindowInner)
+                this._resizeObserver.observe(chatWindowInner);
+        }
     }
 
     disconnectedCallback() {

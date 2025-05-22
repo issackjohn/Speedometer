@@ -27,7 +27,8 @@ class RecipeCarousel extends LightDOMLitElement {
         });
     }
 
-    firstUpdated() {
+    connectedCallback() {
+        super.connectedCallback();
         const carousel = this.querySelector(".carousel");
         if (carousel)
             this._resizeObserver.observe(carousel);
