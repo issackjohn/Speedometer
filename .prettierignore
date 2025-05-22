@@ -46,5 +46,4 @@ package-lock.json
 /resources/perf.webkit.org
 
 /resources/react-stockcharts
-
-/experimental/responsive-design/
+/experimental/responsive-design/**/*.generated.css
