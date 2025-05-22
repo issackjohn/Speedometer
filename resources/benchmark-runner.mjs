@@ -153,8 +153,8 @@ class PageElement {
         this.#node.style.width = width;
     }
 
-    scrollIntoView() {
-        this.#node.scrollIntoView();
+    scrollIntoView(options) {
+        this.#node.scrollIntoView(options);
     }
 
     dispatchEvent(eventName, options = NATIVE_OPTIONS, eventType = Event) {
