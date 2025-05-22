@@ -63,7 +63,7 @@ class Page {
      * @returns PageElement | null
      */
     querySelector(selector, path = [], inIframe = false) {
-        const lookupStartNode = inIframe ? this._frame.contentDocument : this._frame.contentDocument;
+        const lookupStartNode = this._frame.contentDocument;
         const element = getParent(lookupStartNode, path).querySelector(selector);
 
         if (element === null)
