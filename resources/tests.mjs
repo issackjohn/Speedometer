@@ -1117,11 +1117,12 @@ Suites.push({
     name: "Responsive-Design",
     url: "experimental/responsive-design/dist/index.html",
     tags: ["responsive-design", "webcomponents", "experimental"],
+    type: "async",
     async prepare(page) {
         (await page.waitForElement("#content-iframe")).focus();
     },
     tests: [
-        new BenchmarkTestStep("LoadChatAndExpandRecipes", (page) => {
+        new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
             const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
@@ -1143,18 +1144,16 @@ Suites.push({
                 page.layout();
             }
         }),
-        new BenchmarkTestStep("ReduceWidthIn5Steps", (page) => {
+        new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
 
-            widths.forEach((width) => {
+            for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
-                page.layout();
-                page.layout();
-            });
+            }
         }),
-        new BenchmarkTestStep("ScrollToChatAndSendMessages", (page) => {
+        new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
 
             // Navigate through the carousel items
@@ -1187,16 +1186,14 @@ Suites.push({
                 page.layout();
             }
         }),
-        new BenchmarkTestStep("IncreaseWidthIn5Steps", (page) => {
+        new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
 
-            widths.forEach((width) => {
+            for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
-                page.layout();
-                page.layout();
-            });
+            }
         }),
     ],
 });
