@@ -13,8 +13,6 @@ export class AppRibbon extends LightDOMLitElement {
         super();
         this.buttons = ribbonButtons;
         this.visibleButtons = this.buttons;
-        // ResizeObserver is used primarily to exercise this API as part of the benchmark.
-        // While CSS or window.matchMedia could potentially be used instead.
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
@@ -50,6 +48,8 @@ export class AppRibbon extends LightDOMLitElement {
             { minWidth: 318, buttons: 3 },
         ];
 
+        // ResizeObserver is used primarily to exercise this API as part of the benchmark.
+        // While CSS or window.matchMedia could potentially be used instead.
         const breakpoint = breakpoints.find((bp) => width >= bp.minWidth);
         this.visibleButtons = breakpoint ? this.buttons.slice(0, breakpoint.buttons) : this.buttons.slice(0, 2);
         this.requestUpdate();

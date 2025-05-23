@@ -17,7 +17,6 @@ class InformationWindow extends LitElement {
         this._isChatExpanded = true;
         this._currentIndex = 0;
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
-        // While CSS or window.matchMedia could potentially be used instead.
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
