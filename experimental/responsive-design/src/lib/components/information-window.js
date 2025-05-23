@@ -16,6 +16,7 @@ class InformationWindow extends LitElement {
         this.restaurants = restaurants;
         this._isChatExpanded = true;
         this._currentIndex = 0;
+        // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
@@ -31,12 +32,12 @@ class InformationWindow extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         adoptStyles(this.shadowRoot, [chatWindowStyles]);
-    }
 
-    firstUpdated() {
-        const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
-        if (chatWindowInner)
-            this._resizeObserver.observe(chatWindowInner);
+        if (this.chatWindow) {
+            const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
+            if (chatWindowInner)
+                this._resizeObserver.observe(chatWindowInner);
+        }
     }
 
     disconnectedCallback() {

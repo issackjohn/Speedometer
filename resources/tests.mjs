@@ -1117,11 +1117,12 @@ Suites.push({
     name: "Responsive-Design",
     url: "experimental/responsive-design/dist/index.html",
     tags: ["responsive-design", "webcomponents", "experimental"],
+    type: "async",
     async prepare(page) {
         (await page.waitForElement("#content-iframe")).focus();
     },
     tests: [
-        new BenchmarkTestStep("LoadChatAndExpandRecipes", (page) => {
+        new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
             const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
@@ -1138,12 +1139,12 @@ Suites.push({
 
             // Expand recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            for (const btn of showMoreBtn) {
+            showMoreBtn.forEach((btn) => {
                 btn.click();
                 page.layout();
-            }
+            });
         }),
-        new BenchmarkTestStep("ReduceWidthIn5Steps", (page) => {
+        new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
 
@@ -1152,7 +1153,7 @@ Suites.push({
                 page.layout();
             });
         }),
-        new BenchmarkTestStep("ScrollToChatAndSendMessages", (page) => {
+        new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
 
             // Navigate through the carousel items
@@ -1166,26 +1167,26 @@ Suites.push({
 
             // Collapse recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            for (const btn of showMoreBtn) {
+            showMoreBtn.forEach((btn) => {
                 btn.click();
                 page.layout();
-            }
+            });
 
             const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
-            element.scrollIntoView();
+            element.scrollIntoView({ behavior: "instant" });
             page.layout();
 
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
-            for (const message of messagesToBeSent) {
+            messagesToBeSent.forEach((message) => {
                 chatInput.setValue(message);
                 chatInput.dispatchEvent("input");
                 chatInput.enter("keydown");
                 page.layout();
-            }
+            });
         }),
-        new BenchmarkTestStep("IncreaseWidthIn5Steps", (page) => {
+        new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
 
