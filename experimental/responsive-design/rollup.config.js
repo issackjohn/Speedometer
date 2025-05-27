@@ -13,11 +13,9 @@ const PROD_OUTPUT_DIR = "dist";
 
 const outputDir = process.env.ROLLUP_WATCH ? DEV_OUTPUT_DIR : PROD_OUTPUT_DIR;
 
-// Clean the output directory before bundling
-if (fs.existsSync(outputDir))
+// Clean the output directory before bundling (only for production builds)
+if (!process.env.ROLLUP_WATCH && fs.existsSync(outputDir))
     fs.rmSync(outputDir, { recursive: true, force: true });
-
-fs.mkdirSync(outputDir, { recursive: true });
 
 export default {
     input: "src/app.js",
