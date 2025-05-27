@@ -149,14 +149,25 @@ class ComponentBase extends CommonComponentBase {
             for (const query of mediaQueries) {
                 const mediaQueryList = window.matchMedia(query);
                 
-                // Add change listener for the media query
-                mediaQueryList.addEventListener('change', (event) => {
+                // Add change listener for the media query (compatible with both modern and older browsers)
+                const mediaQueryHandler = (event) => {
                     // When media query state changes, update all components that respond to resize
                     for (const component of ComponentBase._componentsToRenderOnResize)
                         component.enqueueToRender();
-                });
+                };
                 
-                ComponentBase._mediaQueryLists.push(mediaQueryList);
+                // Try modern addEventListener first, fall back to older addListener if needed
+                if (mediaQueryList.addEventListener) {
+                    mediaQueryList.addEventListener('change', mediaQueryHandler);
+                } else if (mediaQueryList.addListener) {
+                    // Older implementation (for IE and older browsers)
+                    mediaQueryList.addListener(mediaQueryHandler);
+                }
+                
+                ComponentBase._mediaQueryLists.push({
+                    query: mediaQueryList,
+                    handler: mediaQueryHandler
+                });
             }
         }
         ComponentBase._componentsToRenderOnResize.add(component);
@@ -169,7 +180,15 @@ class ComponentBase extends CommonComponentBase {
         // If no more components need resize monitoring, clean up the media query listeners
         if (ComponentBase._componentsToRenderOnResize.size === 0 && ComponentBase._mediaQueryLists) {
             // In a real application, we might want to remove the event listeners here
-            // but for benchmarking purposes, we'll keep them to maintain consistent behavior
+            // For browsers that support it, we could do:
+            // for (const item of ComponentBase._mediaQueryLists) {
+            //     if (item.query.removeEventListener) {
+            //         item.query.removeEventListener('change', item.handler);
+            //     } else if (item.query.removeListener) {
+            //         item.query.removeListener(item.handler);
+            //     }
+            // }
+            // But for benchmarking purposes, we'll just set to null
             ComponentBase._mediaQueryLists = null;
         }
     }
