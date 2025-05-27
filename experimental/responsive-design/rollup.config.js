@@ -24,7 +24,7 @@ export default {
             file: `${outputDir}/app.js`,
             format: "es",
             name: "app",
-            plugins: [terser()],
+            plugins: process.env.ROLLUP_WATCH ? [] : [terser()],
         },
     ],
     plugins: [
