@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs";
 import process from "process";
 
-const DEV_OUTPUT_DIR = "dev-dist";
+const DEV_OUTPUT_DIR = "build-dev";
 const PROD_OUTPUT_DIR = "dist";
 
 const outputDir = process.env.ROLLUP_WATCH ? DEV_OUTPUT_DIR : PROD_OUTPUT_DIR;
