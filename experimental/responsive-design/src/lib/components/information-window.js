@@ -18,12 +18,15 @@ class InformationWindow extends LitElement {
 
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
+            performance.mark("InformationWindow-resize-start");
             for (const entry of entries) {
                 const height = entry.contentBoxSize && entry.contentBoxSize[0] ? entry.contentBoxSize[0].blockSize : entry.contentRect.height;
                 this._isChatExpanded = height > 350;
                 this._currentIndex = 0;
                 this.updateCarousel();
             }
+            performance.mark("InformationWindow-resize-end");
+            performance.measure("InformationWindow-resize", "InformationWindow-resize-start", "InformationWindow-resize-end");
         });
     }
 
@@ -66,11 +69,14 @@ class InformationWindow extends LitElement {
     }
 
     updateCarousel() {
+        performance.mark("InformationWindow-updateCarousel-start");
         const cardRow = this.shadowRoot.querySelector(".card-row");
         if (cardRow)
             cardRow.style.transform = `translateX(-${this._currentIndex * 100}%)`;
 
         this.requestUpdate();
+        performance.mark("InformationWindow-updateCarousel-end");
+        performance.measure("InformationWindow-updateCarousel", "InformationWindow-updateCarousel-start", "InformationWindow-updateCarousel-end");
     }
 
     _getExpandedTemplate() {

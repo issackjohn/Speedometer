@@ -19,12 +19,15 @@ class RecipeCarousel extends LightDOMLitElement {
         this._carouselWidth = 0;
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
+            performance.mark("RecipeCarousel-resize-start");
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
                     this._carouselWidth = entry.contentBoxSize[0].inlineSize;
                 else
                     this._carouselWidth = entry.contentRect.width;
             }
+            performance.mark("RecipeCarousel-resize-end");
+            performance.measure("RecipeCarousel-resize", "RecipeCarousel-resize-start", "RecipeCarousel-resize-end");
         });
     }
 

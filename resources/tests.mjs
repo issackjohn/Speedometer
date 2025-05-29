@@ -1122,78 +1122,145 @@ Suites.push({
         (await page.waitForElement("#content-iframe")).focus();
     },
     tests: [
+        // Do we need to call layout, RAF instead?
         new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
+            performance.mark("LoadChatAndExpandRecipes-start");
+
             const iframeElement = page.querySelector("#content-iframe", [], true);
+
+            // Resume previous chat
+            performance.mark("LoadChatAndExpandRecipes-resumeChat-start");
             const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
             page.layout();
+            performance.mark("LoadChatAndExpandRecipes-resumeChat-end");
+            performance.measure("LoadChatAndExpandRecipes-resumeChat", "LoadChatAndExpandRecipes-resumeChat-start", "LoadChatAndExpandRecipes-resumeChat-end");
 
             // Navigate through the restaurants
+            performance.mark("LoadChatAndExpandRecipes-navigateRestaurants-start");
             const nextRestaurantBtn = iframeElement.querySelectorInShadowRoot("#next-restaurant-btn", ["cooking-app", "information-window"]);
             const restaurantCards = iframeElement.querySelectorAllInShadowRoot("restaurant-card", ["cooking-app", "information-window"]);
             const numOfRestaurantCards = restaurantCards.length - 1; // since 1 is already visible
             for (let i = 0; i < numOfRestaurantCards; i++) {
+                performance.mark(`LoadChatAndExpandRecipes-restaurant-${i}-start`);
                 nextRestaurantBtn.click();
                 page.layout();
+                performance.mark(`LoadChatAndExpandRecipes-restaurant-${i}-end`);
+                performance.measure(`LoadChatAndExpandRecipes-restaurant-${i}`, `LoadChatAndExpandRecipes-restaurant-${i}-start`, `LoadChatAndExpandRecipes-restaurant-${i}-end`);
             }
+            performance.mark("LoadChatAndExpandRecipes-navigateRestaurants-end");
+            performance.measure("LoadChatAndExpandRecipes-navigateRestaurants", "LoadChatAndExpandRecipes-navigateRestaurants-start", "LoadChatAndExpandRecipes-navigateRestaurants-end");
 
             // Expand recipes
+            performance.mark("LoadChatAndExpandRecipes-expandRecipes-start");
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            showMoreBtn.forEach((btn) => {
+            showMoreBtn.forEach((btn, idx) => {
+                performance.mark(`LoadChatAndExpandRecipes-expandRecipe-${idx}-start`);
                 btn.click();
                 page.layout();
+                performance.mark(`LoadChatAndExpandRecipes-expandRecipe-${idx}-end`);
+                performance.measure(`LoadChatAndExpandRecipes-expandRecipe-${idx}`, `LoadChatAndExpandRecipes-expandRecipe-${idx}-start`, `LoadChatAndExpandRecipes-expandRecipe-${idx}-end`);
             });
+            performance.mark("LoadChatAndExpandRecipes-expandRecipes-end");
+            performance.measure("LoadChatAndExpandRecipes-expandRecipes", "LoadChatAndExpandRecipes-expandRecipes-start", "LoadChatAndExpandRecipes-expandRecipes-end");
+
+            performance.mark("LoadChatAndExpandRecipes-end");
+            performance.measure("LoadChatAndExpandRecipes-total", "LoadChatAndExpandRecipes-start", "LoadChatAndExpandRecipes-end");
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
+            performance.mark("ReduceWidthIn5Steps-start");
+
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
 
-            widths.forEach((width) => {
+            widths.forEach((width, idx) => {
+                performance.mark(`ReduceWidthIn5Steps-step-${idx}-start`);
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
+                performance.mark(`ReduceWidthIn5Steps-step-${idx}-end`);
+                performance.measure(`ReduceWidthIn5Steps-step-${idx}`, `ReduceWidthIn5Steps-step-${idx}-start`, `ReduceWidthIn5Steps-step-${idx}-end`);
             });
+
+            performance.mark("ReduceWidthIn5Steps-end");
+            performance.measure("ReduceWidthIn5Steps-total", "ReduceWidthIn5Steps-start", "ReduceWidthIn5Steps-end");
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
+            performance.mark("ScrollToChatAndSendMessages-start");
+
             const iframeElement = page.querySelector("#content-iframe", [], true);
 
             // Navigate through the carousel items
+            performance.mark("ScrollToChatAndSendMessages-navigateCarousel-start");
             const nextItemBtn = iframeElement.querySelectorInShadowRoot("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
             const recipeCarouselItems = iframeElement.querySelectorAllInShadowRoot(".carousel-item", ["cooking-app", "main-content", "recipe-carousel"]);
             const numOfCarouselItems = recipeCarouselItems.length - 3; // since 3 are already visible
             for (let i = 0; i < numOfCarouselItems; i++) {
+                performance.mark(`ScrollToChatAndSendMessages-carousel-${i}-start`);
                 nextItemBtn.click();
                 page.layout();
+                performance.mark(`ScrollToChatAndSendMessages-carousel-${i}-end`);
+                performance.measure(`ScrollToChatAndSendMessages-carousel-${i}`, `ScrollToChatAndSendMessages-carousel-${i}-start`, `ScrollToChatAndSendMessages-carousel-${i}-end`);
             }
+            performance.mark("ScrollToChatAndSendMessages-navigateCarousel-end");
+            performance.measure("ScrollToChatAndSendMessages-navigateCarousel", "ScrollToChatAndSendMessages-navigateCarousel-start", "ScrollToChatAndSendMessages-navigateCarousel-end");
 
             // Collapse recipes
+            performance.mark("ScrollToChatAndSendMessages-collapseRecipes-start");
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            showMoreBtn.forEach((btn) => {
+            showMoreBtn.forEach((btn, idx) => {
+                performance.mark(`ScrollToChatAndSendMessages-collapse-${idx}-start`);
                 btn.click();
                 page.layout();
+                performance.mark(`ScrollToChatAndSendMessages-collapse-${idx}-end`);
+                performance.measure(`ScrollToChatAndSendMessages-collapse-${idx}`, `ScrollToChatAndSendMessages-collapse-${idx}-start`, `ScrollToChatAndSendMessages-collapse-${idx}-end`);
             });
+            performance.mark("ScrollToChatAndSendMessages-collapseRecipes-end");
+            performance.measure("ScrollToChatAndSendMessages-collapseRecipes", "ScrollToChatAndSendMessages-collapseRecipes-start", "ScrollToChatAndSendMessages-collapseRecipes-end");
 
+            // Scroll to chat
+            performance.mark("ScrollToChatAndSendMessages-scrollToChat-start");
             const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView({ behavior: "instant" });
             page.layout();
+            performance.mark("ScrollToChatAndSendMessages-scrollToChat-end");
+            performance.measure("ScrollToChatAndSendMessages-scrollToChat", "ScrollToChatAndSendMessages-scrollToChat-start", "ScrollToChatAndSendMessages-scrollToChat-end");
 
+            // Send messages
+            performance.mark("ScrollToChatAndSendMessages-sendMessages-start");
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
-            messagesToBeSent.forEach((message) => {
+            messagesToBeSent.forEach((message, idx) => {
+                performance.mark(`ScrollToChatAndSendMessages-message-${idx}-start`);
                 chatInput.setValue(message);
                 chatInput.dispatchEvent("input");
                 chatInput.enter("keydown");
                 page.layout();
+                performance.mark(`ScrollToChatAndSendMessages-message-${idx}-end`);
+                performance.measure(`ScrollToChatAndSendMessages-message-${idx}`, `ScrollToChatAndSendMessages-message-${idx}-start`, `ScrollToChatAndSendMessages-message-${idx}-end`);
             });
+            performance.mark("ScrollToChatAndSendMessages-sendMessages-end");
+            performance.measure("ScrollToChatAndSendMessages-sendMessages", "ScrollToChatAndSendMessages-sendMessages-start", "ScrollToChatAndSendMessages-sendMessages-end");
+
+            performance.mark("ScrollToChatAndSendMessages-end");
+            performance.measure("ScrollToChatAndSendMessages-total", "ScrollToChatAndSendMessages-start", "ScrollToChatAndSendMessages-end");
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
+            performance.mark("IncreaseWidthIn5Steps-start");
+
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
 
-            widths.forEach((width) => {
+            widths.forEach((width, idx) => {
+                performance.mark(`IncreaseWidthIn5Steps-step-${idx}-start`);
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
+                performance.mark(`IncreaseWidthIn5Steps-step-${idx}-end`);
+                performance.measure(`IncreaseWidthIn5Steps-step-${idx}`, `IncreaseWidthIn5Steps-step-${idx}-start`, `IncreaseWidthIn5Steps-step-${idx}-end`);
             });
+
+            performance.mark("IncreaseWidthIn5Steps-end");
+            performance.measure("IncreaseWidthIn5Steps-total", "IncreaseWidthIn5Steps-start", "IncreaseWidthIn5Steps-end");
         }),
     ],
 });

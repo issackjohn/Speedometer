@@ -14,12 +14,15 @@ export class AppRibbon extends LightDOMLitElement {
         this.buttons = ribbonButtons;
         this.visibleButtons = this.buttons;
         this._resizeObserver = new ResizeObserver((entries) => {
+            performance.mark("AppRibbon-resize-start");
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
                     this._updateVisibleButtons(entry.contentBoxSize[0].inlineSize);
                 else
                     this._updateVisibleButtons(entry.contentRect.width);
             }
+            performance.mark("AppRibbon-resize-end");
+            performance.measure("AppRibbon-resize", "AppRibbon-resize-start", "AppRibbon-resize-end");
         });
     }
 
@@ -35,6 +38,7 @@ export class AppRibbon extends LightDOMLitElement {
     }
 
     _updateVisibleButtons(width) {
+        performance.mark("AppRibbon-updateVisibleButtons-start");
         const breakpoints = [
             { minWidth: 1134, buttons: 12 },
             { minWidth: 1069, buttons: 11 },
@@ -53,6 +57,8 @@ export class AppRibbon extends LightDOMLitElement {
         const breakpoint = breakpoints.find((bp) => width >= bp.minWidth);
         this.visibleButtons = breakpoint ? this.buttons.slice(0, breakpoint.buttons) : this.buttons.slice(0, 2);
         this.requestUpdate();
+        performance.mark("AppRibbon-updateVisibleButtons-end");
+        performance.measure("AppRibbon-updateVisibleButtons", "AppRibbon-updateVisibleButtons-start", "AppRibbon-updateVisibleButtons-end");
     }
 
     _getVisibleButtonsTemplate() {
