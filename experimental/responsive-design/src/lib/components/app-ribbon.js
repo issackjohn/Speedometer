@@ -25,6 +25,12 @@ export class AppRibbon extends LightDOMLitElement {
 
     connectedCallback() {
         super.connectedCallback();
+
+        if (this.hasUpdated)
+            this._resizeObserver.observe(this);
+    }
+
+    firstUpdated() {
         this._resizeObserver.observe(this);
     }
 

@@ -30,6 +30,15 @@ class RecipeCarousel extends LightDOMLitElement {
 
     connectedCallback() {
         super.connectedCallback();
+
+        if (this.hasUpdated) {
+            const carousel = this.querySelector(".carousel");
+            if (carousel)
+                this._resizeObserver.observe(carousel);
+        }
+    }
+
+    firstUpdated() {
         const carousel = this.querySelector(".carousel");
         if (carousel)
             this._resizeObserver.observe(carousel);

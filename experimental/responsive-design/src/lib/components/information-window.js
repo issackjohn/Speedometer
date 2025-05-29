@@ -31,6 +31,14 @@ class InformationWindow extends LitElement {
         super.connectedCallback();
         adoptStyles(this.shadowRoot, [chatWindowStyles]);
 
+        if (this.hasUpdated && this.chatWindow) {
+            const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
+            if (chatWindowInner)
+                this._resizeObserver.observe(chatWindowInner);
+        }
+    }
+
+    firstUpdated() {
         if (this.chatWindow) {
             const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
             if (chatWindowInner)
