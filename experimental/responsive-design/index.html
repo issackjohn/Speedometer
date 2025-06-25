@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="A responsive design workload with matchMedia API for Speedometer!" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Responsive Design Workload</title>
+        <link rel="stylesheet" href="src/styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <header class="header">
+                <h1>Responsive Design Performance Test</h1>
+                <p class="subtitle">Testing matchMedia API performance across different breakpoints</p>
+            </header>
+            
+            <main class="main-content">
+                <section class="viewport-info">
+                    <h2>Current Viewport Information</h2>
+                    <div class="info-card" id="viewport-status">
+                        <p id="screen-size">Screen Size: <span id="dimensions"></span></p>
+                        <p id="current-breakpoint">Current Breakpoint: <span id="breakpoint"></span></p>
+                        <p id="orientation">Orientation: <span id="device-orientation"></span></p>
+                    </div>
+                </section>
+
+                <section class="performance-metrics">
+                    <h2>Performance Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card" id="query-time">
+                            <h3>Media Query Evaluation Time</h3>
+                            <p class="metric-value" id="eval-time">0ms</p>
+                        </div>
+                        <div class="metric-card" id="layout-time">
+                            <h3>Layout Recalculation Time</h3>
+                            <p class="metric-value" id="layout-recalc-time">0ms</p>
+                        </div>
+                        <div class="metric-card" id="style-time">
+                            <h3>Style Application Time</h3>
+                            <p class="metric-value" id="style-apply-time">0ms</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="responsive-content">
+                    <h2>Responsive Content Areas</h2>
+                    <div class="content-grid">
+                        <div class="content-card mobile-card">
+                            <h3>Mobile Content</h3>
+                            <p>This content is optimized for mobile devices (max-width: 480px)</p>
+                            <div class="responsive-image mobile-image"></div>
+                        </div>
+                        <div class="content-card tablet-card">
+                            <h3>Tablet Content</h3>
+                            <p>This content is optimized for tablet devices (481px - 768px)</p>
+                            <div class="responsive-image tablet-image"></div>
+                        </div>
+                        <div class="content-card desktop-card">
+                            <h3>Desktop Content</h3>
+                            <p>This content is optimized for desktop devices (min-width: 769px)</p>
+                            <div class="responsive-image desktop-image"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="test-controls">
+                    <h2>Test Controls</h2>
+                    <div class="controls">
+                        <button id="simulate-mobile" class="test-button">Simulate Mobile View</button>
+                        <button id="simulate-tablet" class="test-button">Simulate Tablet View</button>
+                        <button id="simulate-desktop" class="test-button">Simulate Desktop View</button>
+                        <button id="run-performance-test" class="test-button primary">Run Performance Test</button>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="footer">
+                <p>Responsive Design Workload - Testing matchMedia API performance</p>
+            </footer>
+        </div>
+
+        <script src="src/responsive-engine.js"></script>
+        <script src="src/performance-monitor.js"></script>
+        <script src="src/app.js"></script>
+    </body>
+</html>
