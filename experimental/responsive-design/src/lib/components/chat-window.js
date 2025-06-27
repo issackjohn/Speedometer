@@ -16,7 +16,7 @@ class ChatWindow extends LitElement {
 
     constructor() {
         super();
-        this._isExpanded = true;
+        this._isExpanded = false;
         this._isLoaded = false;
         this._currentChat = "";
         this.messages = [];
