@@ -58,16 +58,27 @@ class ChatWindow extends LitElement {
 
     _getOptionsTemplate() {
         return html`
-            <div class="flex flex-1 flex-col items-center justify-center gap-4 self-center p-4">
-                <button id="resume-previous-chat-btn" @click="${this._resumePreviousChat}" class="w-full rounded-md bg-teal-600/50 px-4 py-2 text-white hover:bg-teal-600 focus:outline-none">Resume Previous Chat</button>
-                <button @click="${this._startNewChat}" class="w-full rounded-md bg-orange-500/50 px-4 py-2 text-white hover:bg-orange-500 focus:outline-none">Start a New Conversation</button>
+            <div class="flex flex-1 flex-col items-center justify-center gap-4 self-center rounded-b-xl bg-teal-50 p-4">
+                <button
+                    id="resume-previous-chat-btn"
+                    @click="${this._resumePreviousChat}"
+                    class="w-full rounded-lg border border-teal-500 bg-teal-600 px-4 py-2 text-white hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 focus:ring-offset-teal-50"
+                >
+                    Resume Previous Chat
+                </button>
+                <button
+                    @click="${this._startNewChat}"
+                    class="w-full rounded-lg border border-orange-500 bg-orange-600 px-4 py-2 text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 focus:ring-offset-teal-50"
+                >
+                    Start a New Conversation
+                </button>
             </div>
         `;
     }
 
     _getChatTemplate() {
         return html`
-            <div class="flex flex-1 flex-col">
+            <div class="flex flex-1 flex-col rounded-b-xl bg-teal-50">
                 <chat-messages class="flex-1 overflow-y-auto" .messages="${this.messages}"></chat-messages>
                 <chat-input .value="${this._currentChat}" @input="${this._handleInputChange}" @send-chat="${this._handleSendChat}"></chat-input>
             </div>
@@ -82,10 +93,16 @@ class ChatWindow extends LitElement {
 
     render() {
         return html`
-            <div id="chat-window" class="${this._isExpanded ? "h-[440px]" : "h-12"} bottom-2 right-2 m-auto flex flex-col rounded-lg border-2 border-solid bg-gray-50 shadow-lg sm:sticky sm:w-full md:fixed md:w-1/3">
-                <div class="${this._isExpanded ? "rounded-t-lg" : "rounded-lg"} flex items-center justify-between bg-teal-600/75 px-4 py-2 text-white shadow-md">
+            <div id="chat-window" class="${this._isExpanded ? "h-[440px]" : "h-12"} bottom-2 right-2 m-auto flex flex-col rounded-xl border border-teal-700 bg-teal-50 shadow-lg sm:sticky sm:w-full md:fixed md:w-1/3">
+                <div class="${this._isExpanded ? "rounded-t-xl" : "rounded-xl"} flex items-center justify-between bg-teal-800 px-4 py-2 text-white shadow-md">
                     <p class="text-lg font-semibold">Chef AI</p>
-                    <button id="expand-chat-btn" @click="${this._toggleExpand}" class="rounded-full bg-white px-2 py-1 text-sm text-teal-600/75 hover:bg-teal-100 focus:outline-none">${this._isExpanded ? "Collapse" : "Expand"}</button>
+                    <button
+                        id="expand-chat-btn"
+                        @click="${this._toggleExpand}"
+                        class="rounded-lg border border-teal-600 bg-teal-700 px-3 py-1 text-sm text-white hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 focus:ring-offset-teal-800"
+                    >
+                        ${this._isExpanded ? "Collapse" : "Expand"}
+                    </button>
                 </div>
                 ${this._getContentTemplate()}
             </div>
