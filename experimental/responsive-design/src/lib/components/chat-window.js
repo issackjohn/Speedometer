@@ -16,7 +16,7 @@ class ChatWindow extends LitElement {
 
     constructor() {
         super();
-        this._isExpanded = false;
+        this._isExpanded = true;
         this._isLoaded = false;
         this._currentChat = "";
         this.messages = [];
@@ -93,7 +93,7 @@ class ChatWindow extends LitElement {
 
     render() {
         return html`
-            <div id="chat-window" class="${this._isExpanded ? "h-[440px]" : "h-12"} bottom-2 right-2 m-auto flex flex-col rounded-xl border border-teal-700 bg-teal-50 shadow-lg sm:sticky sm:w-full md:fixed md:w-1/3">
+            <div id="chat-window" class="${this._isExpanded ? "h-[410px]" : "h-12"} bottom-2 right-2 m-auto flex flex-col rounded-xl border border-teal-700 bg-teal-50 shadow-lg sm:sticky sm:w-full md:fixed md:bottom-2 md:w-1/3">
                 <div class="${this._isExpanded ? "rounded-t-xl" : "rounded-xl"} flex items-center justify-between bg-teal-800 px-4 py-2 text-white shadow-md">
                     <p class="text-lg font-semibold">Chef AI</p>
                     <button

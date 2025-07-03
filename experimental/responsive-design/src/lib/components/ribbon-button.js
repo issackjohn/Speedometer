@@ -15,13 +15,27 @@ export class RibbonButton extends LightDOMLitElement {
         this.iconPosition = "0px 0px";
     }
 
+    _getButtonClasses() {
+        const isPrimary = this.variant === "primary";
+        const baseClasses = "relative inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-teal-800";
+
+        const variantClasses = isPrimary
+            ? "border border-orange-400/40 bg-orange-500 text-white shadow-md hover:bg-orange-600 focus:ring-orange-400/60"
+            : "border border-teal-600/40 bg-teal-700/50 text-teal-100 hover:border-teal-500/60 hover:bg-teal-600/70 hover:text-white focus:ring-teal-400/50";
+
+        return `${baseClasses} ${variantClasses}`;
+    }
+
+    _getIconStyle() {
+        return `background: url(./public/images/icons-outline.webp); background-position: ${this.iconPosition}; background-size: auto; filter: brightness(0) invert(1);`;
+    }
+
     render() {
-        const colorClass = this.variant === "primary" ? "bg-orange-400 hover:bg-orange-500" : "bg-teal-600 hover:bg-teal-800";
         return html`
-            <button class="${colorClass} mx-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold text-white shadow-md ring-1 ring-inset ring-gray-300">
+            <button class="${this._getButtonClasses()}">
                 <!-- Heroicons are MIT licensed. See https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
-                <span class="h-6 w-6" style="background: url(./public/images/icons-outline.webp); background-position: ${this.iconPosition};"></span>
-                <span class="text-white">${this.text}</span>
+                <span class="h-6 w-6 flex-shrink-0 opacity-90" style="${this._getIconStyle()}"></span>
+                <span>${this.text}</span>
             </button>
         `;
     }

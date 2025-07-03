@@ -42,15 +42,15 @@ export class AppRibbon extends LightDOMLitElement {
 
     _updateVisibleButtons(width) {
         const breakpoints = [
-            { minWidth: 1134, buttons: 12 },
-            { minWidth: 1069, buttons: 11 },
-            { minWidth: 985, buttons: 10 },
-            { minWidth: 905, buttons: 9 },
-            { minWidth: 818, buttons: 8 },
-            { minWidth: 735, buttons: 7 },
-            { minWidth: 660, buttons: 6 },
-            { minWidth: 540, buttons: 5 },
-            { minWidth: 440, buttons: 4 },
+            { minWidth: 1612, buttons: 12 },
+            { minWidth: 1478, buttons: 11 },
+            { minWidth: 1360, buttons: 10 },
+            { minWidth: 1134, buttons: 9 },
+            { minWidth: 1069, buttons: 8 },
+            { minWidth: 985, buttons: 7 },
+            { minWidth: 818, buttons: 6 },
+            { minWidth: 735, buttons: 5 },
+            { minWidth: 540, buttons: 4 },
             { minWidth: 318, buttons: 3 },
         ];
 
@@ -58,27 +58,32 @@ export class AppRibbon extends LightDOMLitElement {
         // While CSS or window.matchMedia could potentially be used instead.
         const breakpoint = breakpoints.find((bp) => width >= bp.minWidth);
         this.visibleButtons = breakpoint ? this.buttons.slice(0, breakpoint.buttons) : this.buttons.slice(0, 2);
-        this.requestUpdate();
     }
 
     _getVisibleButtonsTemplate() {
         return this.visibleButtons.map(
             (button, index) => html`
                 <ribbon-button id="${button.id}" text="${button.text}" variant="${button.variant}" iconPosition="${button.iconPosition}"></ribbon-button>
-                ${index === 0 ? html`<div class="mx-0.5 h-6 border-l border-gray-300"></div>` : ""}
+                ${index === 0 ? html`<div class="mx-0.5 h-6 w-px bg-teal-600"></div>` : ""}
             `
         );
     }
 
     render() {
         return html`
-            <nav class="mt-1 flex items-center justify-between p-1">
-                <div class="flex flex-nowrap items-baseline overflow-x-hidden">${this._getVisibleButtonsTemplate()}</div>
-                <div class="3xl:hidden">
-                    <button class="mx-1 inline-flex rounded-md bg-gray-200 px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-300">
-                        <!-- Heroicons are MIT licensed. See https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
-                        <span class="h-6 w-6" style="background: url(./public/images/icons-outline.webp); background-position: -96px 0px;"></span>
-                    </button>
+            <nav class="mx-1 my-3 rounded-xl border border-teal-700 bg-teal-800 shadow-lg">
+                <div class="max-w-full px-6 py-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-nowrap items-baseline space-x-2 overflow-x-hidden">${this._getVisibleButtonsTemplate()}</div>
+                        <div class="3xl:hidden ml-4">
+                            <button
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-teal-600 bg-teal-700 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 focus:ring-offset-teal-800"
+                            >
+                                <!-- Heroicons are MIT licensed. See https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
+                                <span class="h-6 w-6" style="background: url(./public/images/icons-outline.webp); background-position: -96px 0px;"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </nav>
         `;
