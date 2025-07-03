@@ -1107,12 +1107,6 @@ Suites.push({
     tests: [
         new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
-
-            // First expand the chat window
-            const expandChatBtn = iframeElement.querySelectorInShadowRoot("#expand-chat-btn", ["cooking-app", "chat-window"]);
-            expandChatBtn.click();
-
-            // Wait for the resume button to appear after expansion
             const resumePreviousChatBtn = await page.waitForElementInShadowRoot(iframeElement, "#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
             page.layout();
