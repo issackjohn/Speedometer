@@ -6,9 +6,10 @@ export const recipes = [
         calories: "500 cals",
         servingSize: "4 servs",
         image: "./public/images/spaghetti-carbonara.webp",
-        tags: ["pasta", "Italian", "carbonara"],
+        tags: ["pasta", "Italian"],
         ingredients: ["200g spaghetti", "100g pancetta", "2 large eggs", "50g pecorino cheese", "50g parmesan", "Black pepper", "Salt"],
         steps: ["Cook the spaghetti.", "Fry the pancetta.", "Mix eggs and cheese.", "Combine everything with pasta."],
+        reviews: "142",
     },
     {
         text: "Chicken Alfredo",
@@ -17,9 +18,10 @@ export const recipes = [
         calories: "600 cals",
         servingSize: "4 servs",
         image: "./public/images/chicken-alfredo.webp",
-        tags: ["pasta", "Italian", "alfredo"],
+        tags: ["pasta", "Italian"],
         ingredients: ["200g fettuccine", "2 chicken breasts", "100g butter", "200ml heavy cream", "50g parmesan", "Garlic", "Salt", "Pepper"],
         steps: ["Cook the fettuccine.", "Cook the chicken.", "Make the Alfredo sauce.", "Combine everything."],
+        reviews: "89",
     },
     {
         text: "Vegetable Stir Fry",
@@ -31,6 +33,7 @@ export const recipes = [
         tags: ["vegetarian", "stir fry"],
         ingredients: ["1 bell pepper", "1 carrot", "100g broccoli", "2 tbsp soy sauce", "1 tbsp olive oil", "Garlic", "Ginger"],
         steps: ["Chop the vegetables.", "Heat the oil.", "Stir fry the vegetables.", "Add soy sauce and serve."],
+        reviews: "76",
     },
     {
         text: "Beef Tacos",
@@ -42,6 +45,7 @@ export const recipes = [
         tags: ["tacos", "Mexican"],
         ingredients: ["300g ground beef", "Taco shells", "1 onion", "1 tomato", "Lettuce", "Cheese", "Taco seasoning"],
         steps: ["Cook the beef with seasoning.", "Prepare the toppings.", "Assemble the tacos.", "Serve with lime."],
+        reviews: "203",
     },
     {
         text: "Margherita Pizza",
@@ -50,9 +54,10 @@ export const recipes = [
         calories: "700 cals",
         servingSize: "4 servs",
         image: "./public/images/margherita-pizza.webp",
-        tags: ["pizza", "Italian", "vegetarian"],
+        tags: ["pizza", "Italian"],
         ingredients: ["Pizza dough", "Tomato sauce", "200g mozzarella", "Fresh basil", "Olive oil", "Salt"],
         steps: ["Prepare the dough.", "Spread the sauce.", "Add cheese and basil.", "Bake the pizza."],
+        reviews: "156",
     },
     {
         text: "Caesar Salad",
@@ -61,9 +66,10 @@ export const recipes = [
         calories: "250 cals",
         servingSize: "2 servs",
         image: "./public/images/caesar-salad.webp",
-        tags: ["salad", "healthy", "quick"],
+        tags: ["salad", "healthy"],
         ingredients: ["Romaine lettuce", "Croutons", "Caesar dressing", "Parmesan cheese", "Lemon juice", "Salt", "Pepper"],
         steps: ["Chop the lettuce.", "Add croutons and cheese.", "Toss with dressing.", "Serve immediately."],
+        reviews: "94",
     },
     {
         text: "Chocolate Chip Cookies",
@@ -72,9 +78,10 @@ export const recipes = [
         calories: "150 cals",
         servingSize: "12 servs",
         image: "./public/images/chocolate-chip-cookies.webp",
-        tags: ["dessert", "cookies", "chocolate"],
+        tags: ["dessert", "cookies"],
         ingredients: ["200g flour", "100g butter", "100g sugar", "1 egg", "1 tsp vanilla extract", "100g chocolate chips", "1 tsp baking soda", "Salt"],
         steps: ["Preheat the oven to 180°C.", "Mix butter and sugar.", "Add egg and vanilla.", "Mix in dry ingredients.", "Fold in chocolate chips.", "Bake for 10-12 minutes."],
+        reviews: "328",
     },
     {
         text: "Greek Salad",
@@ -83,9 +90,10 @@ export const recipes = [
         calories: "200 cals",
         servingSize: "4 servs",
         image: "./public/images/greek-salad.webp",
-        tags: ["salad", "Greek", "healthy"],
+        tags: ["salad", "Greek"],
         ingredients: ["2 cucumbers", "4 tomatoes", "1 red onion", "100g feta cheese", "Olives", "Olive oil", "Lemon juice", "Oregano", "Salt", "Pepper"],
         steps: ["Chop the vegetables.", "Mix with olives and feta.", "Dress with olive oil and lemon juice.", "Season with oregano, salt, and pepper."],
+        reviews: "67",
     },
     {
         text: "Pancakes",
@@ -94,9 +102,10 @@ export const recipes = [
         calories: "350 cals",
         servingSize: "4 servs",
         image: "./public/images/pancakes.webp",
-        tags: ["breakfast", "pancakes", "sweet"],
+        tags: ["breakfast", "pancakes"],
         ingredients: ["200g flour", "2 tbsp sugar", "2 tsp baking powder", "1/2 tsp salt", "1 egg", "300ml milk", "2 tbsp melted butter"],
         steps: ["Mix dry ingredients.", "Whisk in wet ingredients.", "Cook on a hot griddle until bubbles form.", "Flip and cook until golden brown."],
+        reviews: "184",
     },
     {
         text: "Tomato Soup",
@@ -105,9 +114,10 @@ export const recipes = [
         calories: "150 cals",
         servingSize: "4 servs",
         image: "./public/images/tomato-soup.webp",
-        tags: ["soup", "vegetarian", "comfort"],
+        tags: ["soup", "vegetarian"],
         ingredients: ["1kg tomatoes", "1 onion", "2 cloves garlic", "500ml vegetable broth", "Fresh basil", "Olive oil", "Salt", "Pepper"],
         steps: ["Sauté onions and garlic.", "Add tomatoes and broth.", "Simmer for 20 minutes.", "Blend until smooth.", "Season with salt and pepper.", "Garnish with basil."],
+        reviews: "112",
     },
     {
         text: "Lemon Drizzle Cake",
@@ -116,7 +126,7 @@ export const recipes = [
         calories: "400 cals",
         servingSize: "8 servs",
         image: "./public/images/lemon-drizzle-cake.webp",
-        tags: ["dessert", "cake", "lemon"],
+        tags: ["dessert", "cake"],
         ingredients: ["200g flour", "200g sugar", "200g butter", "4 eggs", "2 lemons", "100g powdered sugar", "1 tsp baking powder", "Salt"],
         steps: [
             "Preheat the oven to 180°C.",
@@ -127,6 +137,7 @@ export const recipes = [
             "Mix lemon juice and powdered sugar for drizzle.",
             "Pour over the cake while warm.",
         ],
+        reviews: "95",
     },
     {
         text: "Garlic Bread",
@@ -135,9 +146,10 @@ export const recipes = [
         calories: "200 cals",
         servingSize: "4 servs",
         image: "./public/images/garlic-bread.webp",
-        tags: ["side", "bread", "garlic"],
+        tags: ["side", "bread"],
         ingredients: ["1 baguette", "100g butter", "4 cloves garlic", "Parsley", "Salt"],
         steps: ["Preheat the oven to 200°C.", "Mix softened butter with minced garlic and parsley.", "Slice the baguette and spread the garlic butter.", "Wrap in foil and bake for 10-12 minutes."],
+        reviews: "58",
     },
     {
         text: "Thai Green Curry",
@@ -146,7 +158,7 @@ export const recipes = [
         calories: "450 cals",
         servingSize: "4 servs",
         image: "./public/images/thai-green-curry.webp",
-        tags: ["curry", "Thai", "spicy"],
+        tags: ["curry", "Thai"],
         ingredients: ["400ml coconut milk", "2 tbsp green curry paste", "200g chicken breast", "1 bell pepper", "100g snap peas", "1 tbsp fish sauce", "Basil leaves", "Jasmine rice"],
         steps: [
             "Cook the jasmine rice.",
@@ -157,6 +169,7 @@ export const recipes = [
             "Stir in fish sauce and basil leaves.",
             "Serve over jasmine rice.",
         ],
+        reviews: "147",
     },
     {
         text: "Beef Stroganoff",
@@ -165,7 +178,7 @@ export const recipes = [
         calories: "550 cals",
         servingSize: "4 servs",
         image: "./public/images/beef-stroganoff.webp",
-        tags: ["beef", "Russian", "comfort"],
+        tags: ["beef", "comfort"],
         ingredients: ["500g beef sirloin", "200g mushrooms", "1 onion", "2 cloves garlic", "200ml sour cream", "2 tbsp flour", "Beef broth", "Egg noodles", "Parsley"],
         steps: [
             "Cook the egg noodles according to package instructions.",
@@ -177,6 +190,7 @@ export const recipes = [
             "Stir in sour cream and heat through.",
             "Serve over egg noodles and garnish with parsley.",
         ],
+        reviews: "73",
     },
     {
         text: "Shrimp Paella",
@@ -185,7 +199,7 @@ export const recipes = [
         calories: "600 cals",
         servingSize: "4 servs",
         image: "./public/images/shrimp-paella.webp",
-        tags: ["seafood", "Spanish", "rice"],
+        tags: ["seafood", "Spanish"],
         ingredients: ["300g shrimp", "2 cups paella rice", "1 onion", "1 bell pepper", "2 tomatoes", "4 cloves garlic", "1 tsp saffron threads", "4 cups chicken broth", "Peas", "Lemon wedges"],
         steps: [
             "Sauté onions and garlic until fragrant.",
@@ -197,6 +211,7 @@ export const recipes = [
             "Add shrimp and peas, cooking until shrimp are pink and rice is tender.",
             "Garnish with lemon wedges and serve.",
         ],
+        reviews: "124",
     },
     {
         text: "Quinoa Stuffed Peppers",
@@ -205,7 +220,7 @@ export const recipes = [
         calories: "350 cals",
         servingSize: "4 servs",
         image: "./public/images/quinoa-stuffed-peppers.webp",
-        tags: ["vegetarian", "healthy", "baked"],
+        tags: ["vegetarian", "healthy"],
         ingredients: ["4 bell peppers", "1 cup quinoa", "2 cups vegetable broth", "1 zucchini", "1 onion", "2 cloves garlic", "1 can black beans", "1 cup corn", "1 tsp cumin", "1 tsp paprika", "1 cup shredded cheese", "Cilantro"],
         steps: [
             "Preheat the oven to 375°F (190°C).",
@@ -218,5 +233,6 @@ export const recipes = [
             "Top with shredded cheese and bake for 25-30 minutes.",
             "Garnish with cilantro and serve warm.",
         ],
+        reviews: "86",
     },
 ];

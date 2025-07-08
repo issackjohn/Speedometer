@@ -87,7 +87,7 @@ class InformationWindow extends LitElement {
 
     _getExpandedTemplate() {
         return html`
-            <div class="relative w-full overflow-hidden rounded-lg border border-teal-700 bg-gradient-to-b from-teal-50 to-white px-2 pb-3 shadow-xl">
+            <div class="relative w-full overflow-hidden rounded-lg border border-teal-700 bg-gradient-to-b from-teal-50 to-white px-2 pb-2 shadow-xl">
                 <button
                     class="absolute left-0.5 top-1/2 z-10 flex h-5 w-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-teal-600 bg-white text-teal-700 shadow-lg hover:bg-teal-50 focus:outline-none focus:ring-1 focus:ring-teal-400 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none sm:left-3 sm:h-8 sm:w-8 lg:h-10 lg:w-10"
                     @click="${this.previousCard}"
@@ -99,7 +99,7 @@ class InformationWindow extends LitElement {
                     </svg>
                 </button>
                 <div class="card-row flex w-full">
-                    ${this._restaurants.map((restaurant) => html` <restaurant-card title="${restaurant.title}" distance="${restaurant.distance}" rating="${restaurant.rating}" class="box-border w-full flex-none p-1 sm:p-3"></restaurant-card> `)}
+                    ${this._restaurants.map((restaurant) => html` <restaurant-card title="${restaurant.title}" distance="${restaurant.distance}" rating="${restaurant.rating}" class="box-border w-full flex-none p-2 lg:p-3"></restaurant-card> `)}
                 </div>
                 <button
                     id="next-restaurant-btn"
@@ -142,7 +142,7 @@ class InformationWindow extends LitElement {
             <div class="p-1 xl:p-8">
                 <div class="mb-1 flex items-center justify-between">
                     <h4 class="text-base font-bold text-teal-800">Restaurants Near You</h4>
-                    <div class="rounded-lg bg-teal-100 px-3 py-1 text-sm font-medium text-teal-700">${this._restaurants.length} found</div>
+                    <div class="rounded-lg bg-teal-100 p-1 text-sm font-medium text-teal-700">${this._restaurants.length} found</div>
                 </div>
                 ${this._isChatExpanded ? this._getExpandedTemplate() : this._getGridTemplate()}
             </div>
