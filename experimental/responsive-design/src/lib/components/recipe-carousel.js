@@ -94,11 +94,13 @@ class RecipeCarousel extends LightDOMLitElement {
                 <div class="relative flex w-full gap-4 overflow-hidden">
                     <button
                         @click="${this.previousItem}"
-                        class="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 transform items-center justify-center rounded-full border-2 border-solid border-orange-300 bg-white bg-opacity-100 p-2 text-black shadow-md hover:bg-orange-300 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="absolute left-0.5 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-teal-600 bg-white text-teal-700 shadow-lg hover:bg-teal-50 focus:outline-none focus:ring-1 focus:ring-teal-400 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none sm:left-3 sm:h-10 sm:w-10 lg:h-12 lg:w-12"
                         ?disabled="${this._currentIndex === 0}"
                         aria-label="Previous Recipe"
                     >
-                        &lt;
+                        <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
                     </button>
                     <div class="px-5 pb-1">
                         <div class="carousel scrollbar-hide flex w-full snap-x overflow-x-scroll scroll-smooth">${this._getCarouselItemsTemplate()}</div>
@@ -106,11 +108,13 @@ class RecipeCarousel extends LightDOMLitElement {
                     <button
                         id="next-item-carousel-btn"
                         @click="${this.nextItem}"
-                        class="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 transform items-center justify-center rounded-full border-2 border-solid border-orange-300 bg-white bg-opacity-100 p-2 text-black hover:bg-orange-300 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="absolute right-0.5 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-teal-600 bg-white text-teal-700 shadow-lg hover:bg-teal-50 focus:outline-none focus:ring-1 focus:ring-teal-400 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none sm:right-3 sm:h-10 sm:w-10 lg:h-12 lg:w-12"
                         ?disabled="${this._currentIndex === this.carouselItems.length - this._getItemsPerView()}"
                         aria-label="Next Recipe"
                     >
-                        &gt;
+                        <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
