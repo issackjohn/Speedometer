@@ -7,20 +7,12 @@ export class AppRibbon extends LightDOMLitElement {
     static properties = {
         buttons: { type: Array },
         visibleButtons: { type: Array },
-        showOverflowMenu: { type: Boolean },
     };
 
     constructor() {
         super();
         this.buttons = ribbonButtons;
         this.visibleButtons = this.buttons;
-        this.showOverflowMenu = false;
-
-        // Use matchMedia to control overflow menu visibility (elipse icon).
-        this._mediaQuery = window.matchMedia("(max-width: 2435px)");
-        this._mediaQuery.addEventListener("change", this._handleMediaChange.bind(this));
-        this.showOverflowMenu = this._mediaQuery.matches;
-
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
@@ -46,12 +38,6 @@ export class AppRibbon extends LightDOMLitElement {
         super.disconnectedCallback();
         if (this._resizeObserver)
             this._resizeObserver.disconnect();
-        if (this._mediaQuery)
-            this._mediaQuery.removeEventListener("change", this._handleMediaChange.bind(this));
-    }
-
-    _handleMediaChange(e) {
-        this.showOverflowMenu = e.matches;
     }
 
     _updateVisibleButtons(width) {
@@ -83,27 +69,20 @@ export class AppRibbon extends LightDOMLitElement {
         );
     }
 
-    _getOverflowMenuTemplate() {
-        if (!this.showOverflowMenu)
-            return "";
-
-        return html`
-            <div class="ml-4">
-                <button class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-teal-600 bg-teal-700 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 focus:ring-offset-teal-800">
-                    <!-- Heroicons are MIT licensed. See https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
-                    <span class="h-6 w-6" style="background: url(./public/images/icons-outline.webp); background-position: -96px 0px;"></span>
-                </button>
-            </div>
-        `;
-    }
-
     render() {
         return html`
             <nav class="mx-1 my-3 rounded-xl border border-teal-700 bg-teal-800 shadow-lg">
                 <div class="max-w-full px-6 py-3">
                     <div class="flex items-center justify-between">
                         <div class="flex flex-nowrap items-baseline space-x-2 overflow-x-hidden">${this._getVisibleButtonsTemplate()}</div>
-                        ${this._getOverflowMenuTemplate()}
+                        <div class="3xl:hidden ml-4">
+                            <button
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-teal-600 bg-teal-700 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 focus:ring-offset-teal-800"
+                            >
+                                <!-- Heroicons are MIT licensed. See https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
+                                <span class="h-6 w-6" style="background: url(./public/images/icons-outline.webp); background-position: -96px 0px;"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </nav>
