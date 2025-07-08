@@ -15,6 +15,8 @@ class InformationWindow extends LitElement {
         this._restaurants = restaurants;
         this._isChatExpanded = true;
         this._currentIndex = 0;
+        this._cardRowElement = null;
+        this._chatWindowInner = null;
 
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
@@ -32,17 +34,20 @@ class InformationWindow extends LitElement {
         adoptStyles(this.shadowRoot, [chatWindowStyles]);
 
         if (this.hasUpdated && this.chatWindow) {
-            const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
-            if (chatWindowInner)
-                this._resizeObserver.observe(chatWindowInner);
+            this._chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
+            if (this._chatWindowInner)
+                this._resizeObserver.observe(this._chatWindowInner);
         }
     }
 
     firstUpdated() {
+        // Cache the card row element after first render
+        this._cardRowElement = this.shadowRoot.querySelector(".card-row");
+
         if (this.chatWindow) {
-            const chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
-            if (chatWindowInner)
-                this._resizeObserver.observe(chatWindowInner);
+            this._chatWindowInner = this.chatWindow.shadowRoot.querySelector("#chat-window");
+            if (this._chatWindowInner)
+                this._resizeObserver.observe(this._chatWindowInner);
         }
     }
 
@@ -78,9 +83,14 @@ class InformationWindow extends LitElement {
     }
 
     updateCarousel() {
-        const cardRow = this.shadowRoot.querySelector(".card-row");
-        if (cardRow)
-            cardRow.style.transform = `translateX(-${this._currentIndex * 100}%)`;
+        const cardRow = this._cardRowElement || this.shadowRoot.querySelector(".card-row");
+        if (cardRow) {
+            if (!this._cardRowElement)
+                this._cardRowElement = cardRow;
+
+            const translateValue = -this._currentIndex * 100;
+            cardRow.style.transform = `translateX(${translateValue}%)`;
+        }
 
         this.requestUpdate();
     }
