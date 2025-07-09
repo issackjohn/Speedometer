@@ -17,6 +17,7 @@ class RecipeCarousel extends LightDOMLitElement {
         this.carouselItems = carouselItems;
         this._currentIndex = 0;
         this._carouselWidth = 0;
+        this._carouselElement = null;
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
@@ -39,9 +40,9 @@ class RecipeCarousel extends LightDOMLitElement {
     }
 
     firstUpdated() {
-        const carousel = this.querySelector(".carousel");
-        if (carousel)
-            this._resizeObserver.observe(carousel);
+        this._carouselElement = this.querySelector(".carousel");
+        if (this._carouselElement)
+            this._resizeObserver.observe(this._carouselElement);
     }
 
     disconnectedCallback() {
@@ -51,8 +52,11 @@ class RecipeCarousel extends LightDOMLitElement {
     }
 
     previousItem() {
-        const carousel = this.querySelector(".carousel");
+        const carousel = this._carouselElement || this.querySelector(".carousel");
         if (carousel) {
+            if (!this._carouselElement)
+                this._carouselElement = carousel;
+
             const itemsPerView = this._getItemsPerView();
             carousel.scrollBy({
                 left: -carousel.clientWidth / itemsPerView,
@@ -63,8 +67,11 @@ class RecipeCarousel extends LightDOMLitElement {
     }
 
     nextItem() {
-        const carousel = this.querySelector(".carousel");
+        const carousel = this._carouselElement || this.querySelector(".carousel");
         if (carousel) {
+            if (!this._carouselElement)
+                this._carouselElement = carousel;
+
             const itemsPerView = this._getItemsPerView();
             carousel.scrollBy({
                 left: carousel.clientWidth / itemsPerView,
