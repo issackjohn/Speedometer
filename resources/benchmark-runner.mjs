@@ -49,19 +49,6 @@ class Page {
         });
     }
 
-    async waitForElementInShadowRoot(startElement, selector, shadowPath) {
-        return new Promise((resolve) => {
-            const resolveIfReady = () => {
-                const element = startElement.querySelectorInShadowRoot(selector, shadowPath);
-                let callback = resolveIfReady;
-                if (element)
-                    callback = () => resolve(element);
-                this._frame.contentWindow.requestAnimationFrame(callback);
-            };
-            resolveIfReady();
-        });
-    }
-
     /**
      * Returns the first element within the document that matches the specified selector, or group of selectors.
      * If no matches are found, null is returned.

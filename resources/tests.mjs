@@ -1107,7 +1107,7 @@ Suites.push({
     tests: [
         new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
-            const resumePreviousChatBtn = await page.waitForElementInShadowRoot(iframeElement, "#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
+            const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
             page.layout();
 
