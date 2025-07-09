@@ -143,7 +143,7 @@ class RecipeCard extends LightDOMLitElement {
 
                 <div class="flex items-center justify-center border-t border-gray-200 pt-2">
                     <div class="flex items-center space-x-2">
-                        <div class="flex items-center">${[1, 2, 3, 4, 5].map(() => html` <span class="text-xs text-yellow-400">★</span> `)}</div>
+                        <div class="flex items-center">${[1, 2, 3, 4, 5].map(() => html`<span class="text-xs text-yellow-400">★</span>`)}</div>
                         <span class="text-xs text-gray-600">(${this.recipe.reviews || "0"} reviews)</span>
                     </div>
                 </div>
