@@ -4,7 +4,7 @@ export const ribbonButtons = [
     { id: "recipes-button", text: "Recipes", variant: "secondary", iconPosition: "0px -24px" },
     { id: "ingredients-button", text: "Ingredients", variant: "secondary", iconPosition: "-72px -24px" },
     { id: "favorites-button", text: "Favorites", variant: "secondary", iconPosition: "0px 0px" },
-    { id: "chef-tips-button", text: "Chefs Tips", variant: "secondary", iconPosition: "0px -48px" },
+    { id: "chef-tips-button", text: "Tips", variant: "secondary", iconPosition: "0px -48px" },
     { id: "blog-button", text: "Blog", variant: "secondary", iconPosition: "-24px -48px" },
     { id: "shop-button", text: "Shop", variant: "secondary", iconPosition: "-24px -24px" },
     { id: "events-button", text: "Events", variant: "secondary", iconPosition: "-48px -48px" },
