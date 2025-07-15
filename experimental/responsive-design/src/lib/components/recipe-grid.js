@@ -17,8 +17,16 @@ class RecipeGrid extends LightDOMLitElement {
         this.isCompactLayout = false;
 
         this._compactQuery = window.matchMedia("(max-width: 640px)");
-        this._compactQuery.addEventListener("change", this._handleLayoutChange.bind(this));
+        this._boundHandleLayoutChange = this._handleLayoutChange.bind(this);
+        this._compactQuery.addEventListener("change", this._boundHandleLayoutChange);
         this.isCompactLayout = this._compactQuery.matches;
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        if (this._compactQuery && this._boundHandleLayoutChange)
+            this._compactQuery.removeEventListener("change", this._boundHandleLayoutChange);
+
     }
 
     _handleLayoutChange(event) {
