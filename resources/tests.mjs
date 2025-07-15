@@ -1122,19 +1122,19 @@ Suites.push({
 
             // Expand recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            showMoreBtn.forEach((btn) => {
+            for (const btn of showMoreBtn) {
                 btn.click();
                 page.layout();
-            });
+            }
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
 
-            widths.forEach((width) => {
+            for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
-            });
+            }
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
@@ -1150,10 +1150,10 @@ Suites.push({
 
             // Collapse recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
-            showMoreBtn.forEach((btn) => {
+            for (const btn of showMoreBtn) {
                 btn.click();
                 page.layout();
-            });
+            }
 
             const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView({ behavior: "instant" });
@@ -1162,21 +1162,21 @@ Suites.push({
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
             const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
-            messagesToBeSent.forEach((message) => {
+            for (const message of messagesToBeSent) {
                 chatInput.setValue(message);
                 chatInput.dispatchEvent("input");
                 chatInput.enter("keydown");
                 page.layout();
-            });
+            }
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
 
-            widths.forEach((width) => {
+            for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
-            });
+            }
         }),
     ],
 });
