@@ -1131,10 +1131,19 @@ Suites.push({
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
 
+            // The matchMedia query is "(max-width: 640px)"
+            // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
+            // This happens when the width changes from 704px to 640px
+            const resizeWorkPromise = new Promise((resolve) => {
+                page.addEventListener("resize-work-complete", resolve, { once: true });
+            });
+
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
             }
+
+            await resizeWorkPromise;
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
             const iframeElement = page.querySelector("#content-iframe", [], true);
@@ -1173,10 +1182,19 @@ Suites.push({
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
 
+            // The matchMedia query is "(max-width: 640px)"
+            // Starting from a width <= 640px, we'll get 1 event when crossing back to > 640px.
+            // This happens when the width changes from 640px to 704px.
+            const resizeWorkPromise = new Promise((resolve) => {
+                page.addEventListener("resize-work-complete", resolve, { once: true });
+            });
+
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout();
             }
+
+            await resizeWorkPromise;
         }),
     ],
 });
