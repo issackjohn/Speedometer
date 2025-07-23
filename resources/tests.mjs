@@ -1106,25 +1106,26 @@ Suites.push({
     },
     tests: [
         new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
-            const iframeElement = page.querySelector("#content-iframe", [], true);
-            const resumePreviousChatBtn = iframeElement.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
+            const iframe = page.querySelector("#content-iframe");
+            const iframeContent = page.wrapElement(iframe.getContentDocument());
+            const resumePreviousChatBtn = iframeContent.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
-            page.layout();
+            page.layout(iframe.getContentDocument().body);
 
             // Navigate through the restaurants
-            const nextRestaurantBtn = iframeElement.querySelectorInShadowRoot("#next-restaurant-btn", ["cooking-app", "information-window"]);
-            const restaurantCards = iframeElement.querySelectorAllInShadowRoot("restaurant-card", ["cooking-app", "information-window"]);
+            const nextRestaurantBtn = iframeContent.querySelectorInShadowRoot("#next-restaurant-btn", ["cooking-app", "information-window"]);
+            const restaurantCards = iframeContent.querySelectorAllInShadowRoot("restaurant-card", ["cooking-app", "information-window"]);
             const numOfRestaurantCards = restaurantCards.length - 1; // since 1 is already visible
             for (let i = 0; i < numOfRestaurantCards; i++) {
                 nextRestaurantBtn.click();
-                page.layout();
+                page.layout(iframe.getContentDocument().body);
             }
 
             // Expand recipes
-            const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
+            const showMoreBtn = iframeContent.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
-                page.layout();
+                page.layout(iframe.getContentDocument().body);
             }
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
@@ -1140,13 +1141,17 @@ Suites.push({
 
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
-                page.layout();
+                page.layout(iframeElement.getContentDocument().body);
             }
 
             await resizeWorkPromise;
+
+            // Force layout in the iframe to ensure all pending work is done
+            page.layout(iframeElement.getContentDocument().body);
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
-            const iframeElement = page.querySelector("#content-iframe", [], true);
+            const iframe = page.querySelector("#content-iframe");
+            const iframeElement = page.wrapElement(iframe.getContentDocument());
 
             // Navigate through the carousel items
             const nextItemBtn = iframeElement.querySelectorInShadowRoot("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
@@ -1154,19 +1159,19 @@ Suites.push({
             const numOfCarouselItems = recipeCarouselItems.length - 3; // since 3 are already visible
             for (let i = 0; i < numOfCarouselItems; i++) {
                 nextItemBtn.click();
-                page.layout();
+                page.layout(iframe.getContentDocument().body);
             }
 
             // Collapse recipes
             const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
-                page.layout();
+                page.layout(iframe.getContentDocument().body);
             }
 
             const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView({ behavior: "instant" });
-            page.layout();
+            page.layout(iframe.getContentDocument().body);
 
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
@@ -1175,8 +1180,9 @@ Suites.push({
                 chatInput.setValue(message);
                 chatInput.dispatchEvent("input");
                 chatInput.enter("keydown");
-                page.layout();
+                page.layout(iframe.getContentDocument().body);
             }
+            page.layout(iframe.getContentDocument().body);
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
@@ -1191,10 +1197,13 @@ Suites.push({
 
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
-                page.layout();
+                page.layout(iframeElement.getContentDocument().body);
             }
 
             await resizeWorkPromise;
+
+            // Force layout in the iframe to ensure all pending work is done
+            page.layout(iframeElement.getContentDocument().body);
         }),
     ],
 });
