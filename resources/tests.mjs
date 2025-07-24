@@ -1142,12 +1142,13 @@ Suites.push({
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout(iframeElement.getContentDocument().body);
+                // Await resize work after the 640px resize, when media query changes
+                if (width === 640)
+                    await resizeWorkPromise;
             }
 
-            await resizeWorkPromise;
-
-            // Force layout in the iframe to ensure all pending work is done
             page.layout(iframeElement.getContentDocument().body);
+            await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
             const iframe = page.querySelector("#content-iframe");
@@ -1182,7 +1183,8 @@ Suites.push({
                 chatInput.enter("keydown");
                 page.layout(iframe.getContentDocument().body);
             }
-            page.layout(iframe.getContentDocument().body);
+
+            await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
@@ -1198,12 +1200,13 @@ Suites.push({
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout(iframeElement.getContentDocument().body);
+                // Await resize work after the 704px resize, when media query changes
+                if (width === 704)
+                    await resizeWorkPromise;
             }
 
-            await resizeWorkPromise;
-
-            // Force layout in the iframe to ensure all pending work is done
             page.layout(iframeElement.getContentDocument().body);
+            await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
     ],
 });

@@ -33,10 +33,12 @@ class ChatWindow extends LitElement {
         this._showOptions = this._isExpanded;
     }
 
-    _resumePreviousChat() {
+    async _resumePreviousChat() {
         this._isLoaded = true;
         this._showOptions = false;
         this.messages = initialMessages;
+        // Schedule the performance mark after the update
+        await this.updateComplete;
     }
 
     _startNewChat() {
@@ -45,10 +47,16 @@ class ChatWindow extends LitElement {
         this._showOptions = false;
     }
 
-    _handleSendChat() {
+    async _handleSendChat() {
         if (this._currentChat.trim()) {
             this.messages = [...this.messages, { user: this._currentChat }, { bot: "Here's the image for you!", imageUrl: "./public/images/tomato-soup.webp", imageAlt: "Tomato Soup" }];
             this._currentChat = "";
+            // Schedule the performance mark after the update
+            await this.updateComplete;
+
+            // Dispatch to parent window (the benchmark runner's window)
+            if (window.parent !== window)
+                window.parent.dispatchEvent(new CustomEvent("chat-message-complete"));
         }
     }
 

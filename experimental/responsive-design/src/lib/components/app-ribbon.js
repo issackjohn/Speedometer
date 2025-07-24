@@ -59,7 +59,6 @@ class AppRibbon extends LightDOMLitElement {
         // While CSS or window.matchMedia could potentially be used instead.
         const breakpoint = breakpoints.find((bp) => width >= bp.minWidth);
         this.visibleButtons = breakpoint ? this.buttons.slice(0, breakpoint.buttons) : this.buttons.slice(0, 2);
-        this.requestUpdate();
     }
 
     _getVisibleButtonsTemplate() {
