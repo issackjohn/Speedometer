@@ -62,7 +62,6 @@ class AppRibbon extends LightDOMLitElement {
 
         if (this.visibleButtons.length !== newButtonCount)
             this.visibleButtons = this.buttons.slice(0, newButtonCount);
-
     }
 
     _getVisibleButtonsTemplate() {

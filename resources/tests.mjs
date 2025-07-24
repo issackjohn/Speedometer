@@ -1132,6 +1132,7 @@ Suites.push({
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [768, 704, 640, 560, 480];
+            const MATCH_MEDIA_QUERY_BREAKPOINT = 640;
 
             // The matchMedia query is "(max-width: 640px)"
             // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
@@ -1143,8 +1144,7 @@ Suites.push({
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout(iframeElement.getContentDocument().body);
-                // Await resize work after the 640px resize, when media query changes
-                if (width === 640)
+                if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
             }
 
@@ -1190,6 +1190,7 @@ Suites.push({
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
             const widths = [560, 640, 704, 768, 800];
+            const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
 
             // The matchMedia query is "(max-width: 640px)"
             // Starting from a width <= 640px, we'll get 1 event when crossing back to > 640px.
@@ -1201,8 +1202,7 @@ Suites.push({
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
                 page.layout(iframeElement.getContentDocument().body);
-                // Await resize work after the 704px resize, when media query changes
-                if (width === 704)
+                if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
             }
 
