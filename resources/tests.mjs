@@ -1106,11 +1106,11 @@ Suites.push({
     },
     tests: [
         new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
-            const iframe = page.querySelector("#content-iframe");
-            const iframeContent = page.wrapElement(iframe.getContentDocument());
+            const iframeElement = page.querySelector("#content-iframe");
+            const iframeContent = page.wrapElement(iframeElement.getContentDocument());
             const resumePreviousChatBtn = iframeContent.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
-            page.layout(iframe.getContentDocument().body);
+            page.layout(iframeElement.getContentDocument().body);
 
             // Navigate through the restaurants
             const nextRestaurantBtn = iframeContent.querySelectorInShadowRoot("#next-restaurant-btn", ["cooking-app", "information-window"]);
@@ -1118,14 +1118,14 @@ Suites.push({
             const numOfRestaurantCards = restaurantCards.length - 1; // since 1 is already visible
             for (let i = 0; i < numOfRestaurantCards; i++) {
                 nextRestaurantBtn.click();
-                page.layout(iframe.getContentDocument().body);
+                page.layout(iframeElement.getContentDocument().body);
             }
 
             // Expand recipes
             const showMoreBtn = iframeContent.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
-                page.layout(iframe.getContentDocument().body);
+                page.layout(iframeElement.getContentDocument().body);
             }
             await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
@@ -1152,37 +1152,37 @@ Suites.push({
             await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
-            const iframe = page.querySelector("#content-iframe");
-            const iframeElement = page.wrapElement(iframe.getContentDocument());
+            const iframeElement = page.querySelector("#content-iframe");
+            const iframeContent = page.wrapElement(iframeElement.getContentDocument());
 
             // Navigate through the carousel items
-            const nextItemBtn = iframeElement.querySelectorInShadowRoot("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
-            const recipeCarouselItems = iframeElement.querySelectorAllInShadowRoot(".carousel-item", ["cooking-app", "main-content", "recipe-carousel"]);
+            const nextItemBtn = iframeContent.querySelectorInShadowRoot("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
+            const recipeCarouselItems = iframeContent.querySelectorAllInShadowRoot(".carousel-item", ["cooking-app", "main-content", "recipe-carousel"]);
             const numOfCarouselItems = recipeCarouselItems.length - 3; // since 3 are already visible
             for (let i = 0; i < numOfCarouselItems; i++) {
                 nextItemBtn.click();
-                page.layout(iframe.getContentDocument().body);
+                page.layout(iframeElement.getContentDocument().body);
             }
 
             // Collapse recipes
-            const showMoreBtn = iframeElement.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
+            const showMoreBtn = iframeContent.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
-                page.layout(iframe.getContentDocument().body);
+                page.layout(iframeElement.getContentDocument().body);
             }
 
-            const element = iframeElement.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
+            const element = iframeContent.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView({ behavior: "instant" });
-            page.layout(iframe.getContentDocument().body);
+            page.layout(iframeElement.getContentDocument().body);
 
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
-            const chatInput = iframeElement.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
+            const chatInput = iframeContent.querySelectorInShadowRoot("#chat-input", ["cooking-app", "chat-window"]);
             for (const message of messagesToBeSent) {
                 chatInput.setValue(message);
                 chatInput.dispatchEvent("input");
                 chatInput.enter("keydown");
-                page.layout(iframe.getContentDocument().body);
+                page.layout(iframeElement.getContentDocument().body);
             }
 
             await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
