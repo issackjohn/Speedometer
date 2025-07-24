@@ -151,9 +151,7 @@ class PageElement {
     }
 
     getContentDocument() {
-        // Check if it's an iframe by checking tagName and contentDocument property
-        console.log(this.#node.tagName);
-        if (this.#node.tagName?.toLowerCase() !== "iframe")
+        if (this.#node.nodeName?.toLowerCase() !== "iframe")
             throw new Error("getContentDocument() called on non-iframe element");
         if (!this.#node.contentDocument)
             throw new Error("Iframe contentDocument is not available.");
