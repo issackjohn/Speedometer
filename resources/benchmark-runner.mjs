@@ -132,10 +132,6 @@ class Page {
     addEventListener(name, listener, options) {
         this._frame.contentWindow.addEventListener(name, listener, options);
     }
-
-    removeEventListener(name, listener, options) {
-        this._frame.contentWindow.removeEventListener(name, listener, options);
-    }
 }
 
 const NATIVE_OPTIONS = {
