@@ -33,11 +33,7 @@ class Page {
     layout(target = null) {
         // If target is provided, it should be a body element to force layout on
         // Otherwise force layout on the current page's body
-        let body;
-        if (target)
-            body = target;
-        else
-            body = this._frame ? this._frame.contentDocument.body : document.body;
+        const body = target || this._frame?.contentDocument?.body || document.body;
 
         const value = forceLayout(body, params.layoutMode);
         body._leakedLayoutValue = value; // Prevent dead code elimination.
