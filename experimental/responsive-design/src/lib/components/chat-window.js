@@ -33,7 +33,7 @@ class ChatWindow extends LitElement {
         this._showOptions = this._isExpanded;
     }
 
-    async _resumePreviousChat() {
+    _resumePreviousChat() {
         this._isLoaded = true;
         this._showOptions = false;
         this.messages = initialMessages;
@@ -45,7 +45,7 @@ class ChatWindow extends LitElement {
         this._showOptions = false;
     }
 
-    async _handleSendChat() {
+    _handleSendChat() {
         if (this._currentChat.trim()) {
             this.messages = [...this.messages, { user: this._currentChat }, { bot: "Here's the image for you!", imageUrl: "./public/images/tomato-soup.webp", imageAlt: "Tomato Soup" }];
             this._currentChat = "";
