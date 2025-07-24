@@ -1127,6 +1127,7 @@ Suites.push({
                 btn.click();
                 page.layout(iframe.getContentDocument().body);
             }
+            await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
