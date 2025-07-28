@@ -1107,10 +1107,11 @@ Suites.push({
     tests: [
         new BenchmarkTestStep("LoadChatAndExpandRecipes", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
-            const iframeContent = page.wrapElement(iframeElement.getContentDocument());
+            const iframeDoc = iframeElement.getContentDocument();
+            const iframeContent = page.wrapElement(iframeDoc);
             const resumePreviousChatBtn = iframeContent.querySelectorInShadowRoot("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
-            page.layout(iframeElement.getContentDocument().body);
+            page.layout(iframeDoc.body);
 
             // Navigate through the restaurants
             const nextRestaurantBtn = iframeContent.querySelectorInShadowRoot("#next-restaurant-btn", ["cooking-app", "information-window"]);
@@ -1118,19 +1119,19 @@ Suites.push({
             const numOfRestaurantCards = restaurantCards.length - 1; // since 1 is already visible
             for (let i = 0; i < numOfRestaurantCards; i++) {
                 nextRestaurantBtn.click();
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
             }
 
             // Expand recipes
             const showMoreBtn = iframeContent.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
             }
-            await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
+            const iframeDoc = iframeElement.getContentDocument();
             const widths = [768, 704, 640, 560, 480];
             const MATCH_MEDIA_QUERY_BREAKPOINT = 640;
 
@@ -1143,17 +1144,18 @@ Suites.push({
 
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
                 if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
             }
 
-            page.layout(iframeElement.getContentDocument().body);
+            page.layout(iframeDoc.body);
             await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
-            const iframeContent = page.wrapElement(iframeElement.getContentDocument());
+            const iframeDoc = iframeElement.getContentDocument();
+            const iframeContent = page.wrapElement(iframeDoc);
 
             // Navigate through the carousel items
             const nextItemBtn = iframeContent.querySelectorInShadowRoot("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
@@ -1161,19 +1163,19 @@ Suites.push({
             const numOfCarouselItems = recipeCarouselItems.length - 3; // since 3 are already visible
             for (let i = 0; i < numOfCarouselItems; i++) {
                 nextItemBtn.click();
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
             }
 
             // Collapse recipes
             const showMoreBtn = iframeContent.querySelectorAllInShadowRoot(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
             }
 
             const element = iframeContent.querySelectorInShadowRoot("#chat-window", ["cooking-app", "chat-window"]);
             element.scrollIntoView({ behavior: "instant" });
-            page.layout(iframeElement.getContentDocument().body);
+            page.layout(iframeDoc.body);
 
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
 
@@ -1182,13 +1184,14 @@ Suites.push({
                 chatInput.setValue(message);
                 chatInput.dispatchEvent("input");
                 chatInput.enter("keydown");
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
             }
 
             await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const iframeElement = page.querySelector("#content-iframe");
+            const iframeDoc = iframeElement.getContentDocument();
             const widths = [560, 640, 704, 768, 800];
             const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
 
@@ -1201,12 +1204,12 @@ Suites.push({
 
             for (const width of widths) {
                 iframeElement.setWidth(`${width}px`);
-                page.layout(iframeElement.getContentDocument().body);
+                page.layout(iframeDoc.body);
                 if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
             }
 
-            page.layout(iframeElement.getContentDocument().body);
+            page.layout(iframeDoc.body);
             await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
         }),
     ],
