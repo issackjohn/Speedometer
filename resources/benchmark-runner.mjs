@@ -36,6 +36,7 @@ class Page {
         const body = target || this._frame?.contentDocument?.body || document.body;
 
         const value = forceLayout(body, params.layoutMode);
+        console.log("Page.layout() forceLayout returned:", value);
         body._leakedLayoutValue = value; // Prevent dead code elimination.
     }
 

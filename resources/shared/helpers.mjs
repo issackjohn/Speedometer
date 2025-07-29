@@ -27,8 +27,11 @@ export function forceLayout(body, layoutMode = "getBoundingRectAndElementFromPoi
     body ??= document.body;
     const rect = body.getBoundingClientRect();
     switch (layoutMode) {
-        case "getBoundingRectAndElementFromPoint":
-            return document.elementFromPoint((rect.width / 2) | 0, (rect.height / 2) | 0);
+        case "getBoundingRectAndElementFromPoint": {
+            const element = document.elementFromPoint((rect.width / 2) | 0, (rect.height / 2) | 0);
+            console.log("forceLayout elementFromPoint:", element, "at coords:", (rect.width / 2) | 0, (rect.height / 2) | 0, "rect:", rect);
+            return element;
+        }
         case "getBoundingClientRect":
             return rect.height;
         default:
