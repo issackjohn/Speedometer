@@ -35,6 +35,7 @@ class Page {
         // Otherwise force layout on the current page's body
         const body = target || this._frame?.contentDocument?.body || document.body;
 
+        console.log("Page.layout() called with body:", body, "layoutMode:", params.layoutMode);
         const value = forceLayout(body, params.layoutMode);
         console.log("Page.layout() forceLayout returned:", value);
         body._leakedLayoutValue = value; // Prevent dead code elimination.
