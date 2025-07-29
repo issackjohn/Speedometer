@@ -30,10 +30,8 @@ class Page {
         return this._frame.contentWindow.localStorage;
     }
 
-    layout(target = null) {
-        // If target is provided, it should be a body element to force layout on
-        // Otherwise force layout on the current page's body
-        const body = target || this._frame?.contentDocument?.body || document.body;
+    layout() {
+        const body = this._frame ? this._frame.contentDocument.body : document.body;
 
         console.log("Page.layout() called with body:", body, "layoutMode:", params.layoutMode);
         const value = forceLayout(body, params.layoutMode);
