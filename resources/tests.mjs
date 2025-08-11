@@ -1109,6 +1109,7 @@ Suites.push({
             const resumePreviousChatBtn = page.querySelector("#resume-previous-chat-btn", ["cooking-app", "chat-window"]);
             resumePreviousChatBtn.click();
             page.layout();
+
             const nextRestaurantBtn = page.querySelector("#next-restaurant-btn", ["cooking-app", "information-window"]);
             const restaurantCards = page.querySelectorAll("restaurant-card", ["cooking-app", "information-window"]);
             const numOfRestaurantCards = restaurantCards.length - 1;
@@ -1116,11 +1117,13 @@ Suites.push({
                 nextRestaurantBtn.click();
                 page.layout();
             }
+
             const showMoreBtn = page.querySelectorAll(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtn) {
                 btn.click();
                 page.layout();
             }
+            
             await new Promise((resolve) => requestAnimationFrame(resolve));
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
@@ -1154,15 +1157,18 @@ Suites.push({
                 nextItemBtn.click();
                 page.layout();
             }
+
             // Collapse recipes
             const showMoreBtnCollapse = page.querySelectorAll(".show-more-btn", ["cooking-app", "main-content", "recipe-grid"]);
             for (const btn of showMoreBtnCollapse) {
                 btn.click();
                 page.layout();
             }
+
             const chatWindow = page.querySelector("#chat-window", ["cooking-app", "chat-window"]);
             chatWindow.scrollIntoView({ behavior: "instant" });
             page.layout();
+
             const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
             const chatInput = page.querySelector("#chat-input", ["cooking-app", "chat-window"]);
             for (const message of messagesToBeSent) {
@@ -1171,14 +1177,20 @@ Suites.push({
                 chatInput.enter("keydown");
                 page.layout();
             }
+
             await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const widths = [560, 640, 704, 768, 800];
             const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
+
+            // The matchMedia query is "(max-width: 640px)"
+            // Starting from a width <= 640px, we'll get 1 event when crossing back to > 640px.
+            // This happens when the width changes from 640px to 704px.
             const resizeWorkPromise = new Promise((resolve) => {
                 page.addEventListener("resize-work-complete", resolve, { once: true });
             });
+
             for (const width of widths) {
                 page._frame.style.width = `${width}px`;
                 page.layout();
@@ -1186,6 +1198,7 @@ Suites.push({
                     await resizeWorkPromise;
 
             }
+
             page.layout();
             await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         }),
