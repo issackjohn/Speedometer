@@ -121,6 +121,10 @@ class Page {
         return this.wrapElement(this._frame.contentWindow[functionName]());
     }
 
+    setWidth(widthPx) {
+        this._frame.style.width = `${widthPx}px`;
+    }
+
     wrapElement(element) {
         return new PageElement(element);
     }
@@ -164,10 +168,6 @@ class PageElement {
 
     getElementByMethod(name) {
         return new PageElement(this.#node[name]());
-    }
-
-    setWidth(width) {
-        this.#node.style.width = width;
     }
 
     scrollIntoView(options) {

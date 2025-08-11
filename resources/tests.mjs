@@ -1123,7 +1123,7 @@ Suites.push({
                 btn.click();
                 page.layout();
             }
-            
+
             await new Promise((resolve) => requestAnimationFrame(resolve));
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
@@ -1138,7 +1138,7 @@ Suites.push({
             });
 
             for (const width of widths) {
-                page._frame.style.width = `${width}px`;
+                page.setWidth(width);
                 page.layout();
                 if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
@@ -1192,7 +1192,7 @@ Suites.push({
             });
 
             for (const width of widths) {
-                page._frame.style.width = `${width}px`;
+                page.setWidth(width);
                 page.layout();
                 if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
