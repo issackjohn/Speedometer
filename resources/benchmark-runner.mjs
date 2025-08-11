@@ -232,14 +232,6 @@ class PageElement {
         return new PageElement(element);
     }
 
-    querySelectorAllInShadowRoot(selector, path = []) {
-        const lookupStartNode = this.#node.shadowRoot ?? this.#node;
-        const elements = Array.from(getParent(lookupStartNode, path).querySelectorAll(selector));
-        for (let i = 0; i < elements.length; i++)
-            elements[i] = new PageElement(elements[i]);
-        return elements;
-    }
-
     querySelector(selector) {
         const element = this.#node.querySelector(selector);
 
