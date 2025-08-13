@@ -1123,8 +1123,6 @@ Suites.push({
                 btn.click();
                 page.layout();
             }
-
-            await new Promise((resolve) => requestAnimationFrame(resolve));
         }),
         new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
             const widths = [768, 704, 640, 560, 480];
