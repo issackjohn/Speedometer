@@ -10,8 +10,9 @@
     "main": "index.js",
     "scripts": {
         "serve": "web-dev-server --config web-dev-server.config.mjs",
-        "prebuild": "npm run build:main-css && npm run build:chat-window-css",
+        "prebuild": "npm run build:images && npm run build:main-css && npm run build:chat-window-css",
         "build": "rollup --config rollup.config.js",
+        "build:images": "node scripts/convert-images.mjs",
         "build:main-css": "npx tailwindcss -i ./src/input.css -o ./src/tailwind.generated.css --minify",
         "build:chat-window-css": "npx tailwindcss -c ./tailwind.chat-window.config.js -i ./src/input.css -o ./src/tailwind.chat-window.generated.css --minify",
         "dev": "concurrently \"npm:dev:*\"",
@@ -21,6 +22,7 @@
         "dev:serve": "web-dev-server --config web-dev-server.dev.config.mjs"
     },
     "dependencies": {
+        "imagemin": "^9.0.1",
         "lit": "^3.3.0"
     },
     "devDependencies": {
@@ -29,6 +31,7 @@
         "@rollup/plugin-terser": "^0.4.4",
         "@web/dev-server": "0.4.3",
         "concurrently": "^9.0.1",
+        "imagemin-webp": "^8.0.0",
         "postcss": "^8.4.40",
         "rollup": "^4.41.1",
         "rollup-plugin-copy": "^3.5.0",
