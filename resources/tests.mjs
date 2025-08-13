@@ -1145,8 +1145,6 @@ Suites.push({
 
             }
 
-            page.layout();
-            // Ensure ResizeObserver callbacks & lifecycle work for the final width are included in sync timing
             await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         }),
         new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
@@ -1177,8 +1175,6 @@ Suites.push({
                 chatInput.enter("keydown");
                 page.layout();
             }
-
-            await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         }),
         new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
             const widths = [560, 640, 704, 768, 800];
@@ -1196,10 +1192,8 @@ Suites.push({
                 page.layout();
                 if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
-
             }
 
-            page.layout();
             await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         }),
     ],
