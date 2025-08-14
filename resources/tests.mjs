@@ -1140,7 +1140,6 @@ Suites.push({
                 page.layout();
                 if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
                     await resizeWorkPromise;
-
             }
 
             await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));

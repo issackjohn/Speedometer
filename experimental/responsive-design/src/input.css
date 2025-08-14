@@ -16,6 +16,9 @@
 }
 
 @layer utilities {
+    .content-auto {
+        content-visibility: auto;
+    }
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }

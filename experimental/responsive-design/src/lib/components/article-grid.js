@@ -23,7 +23,7 @@ class ArticleGrid extends LightDOMLitElement {
         return html`
             <div class="p-2">
                 <section-heading title="Articles" subtitle="Read insightful articles about food, cooking tips, and more."></section-heading>
-                <div class="grid grid-cols-2 gap-6 p-4 xl:grid-cols-4 xl:gap-7">${this._getArticlesTemplate()}</div>
+                <div class="content-auto grid grid-cols-2 gap-6 p-4 xl:grid-cols-4 xl:gap-7">${this._getArticlesTemplate()}</div>
             </div>
         `;
     }
