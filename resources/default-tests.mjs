@@ -1126,9 +1126,9 @@ export const defaultSuites = [
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
             }),
             new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
-                const cvWorkComplete = new Promise((resolve) => {
-                    page.addEventListener("video-grid-content-visibility-complete", resolve, { once: true });
-                });
+                // const cvWorkComplete = new Promise((resolve) => {
+                //     page.addEventListener("video-grid-content-visibility-complete", resolve);
+                // });
 
                 const nextItemBtn = page.querySelector("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
                 const recipeCarouselItems = page.querySelectorAll(".carousel-item", ["cooking-app", "main-content", "recipe-carousel"]);
@@ -1157,8 +1157,7 @@ export const defaultSuites = [
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                await cvWorkComplete;
-                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                // await cvWorkComplete;
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
