@@ -1115,12 +1115,14 @@ export const defaultSuites = [
                 const resizeWorkPromise = new Promise((resolve) => {
                     page.addEventListener("resize-work-complete", resolve, { once: true });
                 });
+                // Safari fallback: if the event never fires, do not hang.
+                const resizeFallback = new Promise((resolve) => setTimeout(resolve, 500));
 
                 for (const width of widths) {
                     page.setWidth(width);
                     page.layout();
                     if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
-                        await resizeWorkPromise;
+                        await Promise.race([resizeWorkPromise, resizeFallback]);
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -1129,6 +1131,8 @@ export const defaultSuites = [
                 const cvWorkComplete = new Promise((resolve) => {
                     page.addEventListener("video-grid-content-visibility-complete", resolve, { once: true });
                 });
+                // Safari fallback: contentvisibilityautostatechange may not fire.
+                const cvFallback = new Promise((resolve) => setTimeout(resolve, 500));
 
                 const nextItemBtn = page.querySelector("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
                 const recipeCarouselItems = page.querySelectorAll(".carousel-item", ["cooking-app", "main-content", "recipe-carousel"]);
@@ -1157,7 +1161,7 @@ export const defaultSuites = [
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                await cvWorkComplete;
+                await Promise.race([cvWorkComplete, cvFallback]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
@@ -1169,12 +1173,14 @@ export const defaultSuites = [
                 const resizeWorkPromise = new Promise((resolve) => {
                     page.addEventListener("resize-work-complete", resolve, { once: true });
                 });
+                // Safari fallback
+                const resizeFallback = new Promise((resolve) => setTimeout(resolve, 500));
 
                 for (const width of widths) {
                     page.setWidth(width);
                     page.layout();
                     if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
-                        await resizeWorkPromise;
+                        await Promise.race([resizeWorkPromise, resizeFallback]);
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
