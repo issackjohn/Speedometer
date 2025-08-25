@@ -944,7 +944,6 @@ export const DefaultSuites = freezeSuites([
         name: "Responsive-Design",
         url: "experimental/responsive-design/dist/index.html",
         tags: ["responsive-design", "webcomponents", "experimental"],
-        disabled: true,
         type: "async",
         async prepare(page) {
             await page.waitForElement("cooking-app");
