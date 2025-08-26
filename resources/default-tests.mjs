@@ -1146,7 +1146,7 @@ export const defaultSuites = [
                 }
 
                 const chatAnchor = page.querySelector("#chat-anchor", ["cooking-app"]);
-                chatAnchor.scrollIntoView({ behavior: "auto", block: "nearest", inline: "nearest" });
+                chatAnchor.scrollIntoView();
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
