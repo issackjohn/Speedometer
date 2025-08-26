@@ -1157,7 +1157,7 @@ export const defaultSuites = [
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                await cvWorkComplete;
+                // await cvWorkComplete;
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
