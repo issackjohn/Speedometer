@@ -31,7 +31,7 @@ export class CookingApp extends LitElement {
                     <main-content></main-content>
                 </div>
                 <div class="flex w-full flex-col md:col-start-3 md:row-start-1 md:row-end-6 md:grid-cols-1">
-                    <div class="flex md:block">
+                    <div id="chat-anchor" class="flex md:block">
                         <chat-window class="w-full md:basis-full"></chat-window>
                         <div class="hidden grow-0 basis-[content] text-center md:block">
                             <information-window></information-window>
