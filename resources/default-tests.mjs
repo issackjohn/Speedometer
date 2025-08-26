@@ -1145,8 +1145,8 @@ export const defaultSuites = [
                     page.layout();
                 }
 
-                const chatAnchor = page.querySelector("#chat-anchor", ["cooking-app"]);
-                chatAnchor.scrollIntoView();
+                // Use focus to bring the chat into view to avoid Safari overscroll from scrollIntoView
+                page.querySelector("#chat-input", ["cooking-app", "chat-window"]).focus();
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
