@@ -1145,12 +1145,12 @@ export const defaultSuites = [
                     page.layout();
                 }
 
-                // Use focus to bring the chat into view to avoid Safari overscroll from scrollIntoView
-                page.querySelector("#chat-input", ["cooking-app", "chat-window"]).focus();
+                // Use focus on the actual textarea to bring the chat into view to avoid Safari overscroll from scrollIntoView
+                page.querySelector("textarea#chat-input", ["cooking-app", "chat-window"]).focus();
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
-                const chatInput = page.querySelector("#chat-input", ["cooking-app", "chat-window"]);
+                const chatInput = page.querySelector("textarea#chat-input", ["cooking-app", "chat-window"]);
                 for (const message of messagesToBeSent) {
                     chatInput.setValue(message);
                     chatInput.dispatchEvent("input");
