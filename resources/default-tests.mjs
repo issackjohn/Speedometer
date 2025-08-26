@@ -1126,9 +1126,9 @@ export const defaultSuites = [
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
             }),
             new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
-                // const cvWorkComplete = new Promise((resolve) => {
-                //     page.addEventListener("video-grid-content-visibility-complete", resolve);
-                // });
+                const cvWorkComplete = new Promise((resolve) => {
+                    page.addEventListener("video-grid-content-visibility-complete", resolve);
+                });
 
                 const nextItemBtn = page.querySelector("#next-item-carousel-btn", ["cooking-app", "main-content", "recipe-carousel"]);
                 const recipeCarouselItems = page.querySelectorAll(".carousel-item", ["cooking-app", "main-content", "recipe-carousel"]);
@@ -1146,7 +1146,7 @@ export const defaultSuites = [
                 }
 
                 const chatWindow = page.querySelector("#chat-window", ["cooking-app", "chat-window"]);
-                chatWindow.scrollIntoView({ behavior: "instant" });
+                chatWindow.scrollIntoView({ behavior: "instant", block: "center" });
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
@@ -1157,7 +1157,7 @@ export const defaultSuites = [
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                // await cvWorkComplete;
+                await cvWorkComplete;
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
