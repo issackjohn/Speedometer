@@ -32,7 +32,6 @@ class Page {
 
     layout() {
         const body = this._frame ? this._frame.contentDocument.body : document.body;
-
         console.log("Page.layout() called with body:", body, "layoutMode:", params.layoutMode);
         const value = forceLayout(body, params.layoutMode);
         console.log("Page.layout() forceLayout returned:", value);
@@ -73,7 +72,7 @@ class Page {
 
         if (element === null)
             return null;
-        return this.wrapElement(element);
+        return this._wrapElement(element);
     }
 
     /**
@@ -95,7 +94,7 @@ class Page {
         const lookupStartNode = this._frame.contentDocument;
         const elements = Array.from(getParent(lookupStartNode, path).querySelectorAll(selector));
         for (let i = 0; i < elements.length; i++)
-            elements[i] = this.wrapElement(elements[i]);
+            elements[i] = this._wrapElement(elements[i]);
         return elements;
     }
 
@@ -103,7 +102,7 @@ class Page {
         const element = this._frame.contentDocument.getElementById(id);
         if (element === null)
             return null;
-        return this.wrapElement(element);
+        return this._wrapElement(element);
     }
 
     call(functionName) {
@@ -118,10 +117,14 @@ class Page {
     }
 
     callToGetElement(functionName) {
-        return this.wrapElement(this._frame.contentWindow[functionName]());
+        return this._wrapElement(this._frame.contentWindow[functionName]());
     }
 
-    wrapElement(element) {
+    setWidth(widthPx) {
+        this._frame.style.width = `${widthPx}px`;
+    }
+
+    _wrapElement(element) {
         return new PageElement(element);
     }
 
@@ -142,14 +145,6 @@ class PageElement {
         this.#node = node;
     }
 
-    getContentDocument() {
-        if (this.#node.nodeName?.toLowerCase() !== "iframe")
-            throw new Error("getContentDocument() called on non-iframe element");
-        if (!this.#node.contentDocument)
-            throw new Error("Iframe contentDocument is not available.");
-        return this.#node.contentDocument;
-    }
-
     setValue(value) {
         this.#node.value = value;
     }
@@ -164,10 +159,6 @@ class PageElement {
 
     getElementByMethod(name) {
         return new PageElement(this.#node[name]());
-    }
-
-    setWidth(width) {
-        this.#node.style.width = width;
     }
 
     scrollIntoView(options) {
@@ -230,14 +221,6 @@ class PageElement {
         if (element === null)
             return null;
         return new PageElement(element);
-    }
-
-    querySelectorAllInShadowRoot(selector, path = []) {
-        const lookupStartNode = this.#node.shadowRoot ?? this.#node;
-        const elements = Array.from(getParent(lookupStartNode, path).querySelectorAll(selector));
-        for (let i = 0; i < elements.length; i++)
-            elements[i] = new PageElement(elements[i]);
-        return elements;
     }
 
     querySelector(selector) {
