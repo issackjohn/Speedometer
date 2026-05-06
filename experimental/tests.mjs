@@ -3,6 +3,17 @@ import { getTodoText } from "../resources/shared/translations.mjs";
 import { numberOfItemsToAdd } from "../resources/shared/todomvc-utils.mjs";
 import { freezeSuites } from "../resources/suites-helper.mjs";
 
+function assertRecipeCarouselResizeObserverCount(page, testName) {
+    const expectedCallbacks = 2;
+    const actualCallbacks = page.getWindowProperty("recipeCarouselResizeObserverCallbackCount");
+    if (actualCallbacks === expectedCallbacks)
+        return;
+
+    const message = `${testName} expected ${expectedCallbacks} recipe carousel ResizeObserver callbacks, got ${actualCallbacks}.`;
+    console.warn(message);
+    throw new Error(message);
+}
+
 export const ExperimentalSuites = freezeSuites([
     {
         name: "TodoMVC-LocalStorage",
@@ -174,6 +185,8 @@ export const ExperimentalSuites = freezeSuites([
                 const widths = [768, 704, 640, 560, 480];
                 const MATCH_MEDIA_QUERY_BREAKPOINT = 640;
 
+                page.call("resetRecipeCarouselResizeObserverCounts");
+
                 // The matchMedia query is "(max-width: 640px)"
                 // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
                 // This happens when the width changes from 704px to 640px
@@ -189,6 +202,7 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                assertRecipeCarouselResizeObserverCount(page, "ReduceWidthIn5Steps");
             }),
             new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
                 const cvWorkComplete = new Promise((resolve) => {
@@ -228,6 +242,8 @@ export const ExperimentalSuites = freezeSuites([
                 const widths = [560, 640, 704, 768, 800];
                 const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
 
+                page.call("resetRecipeCarouselResizeObserverCounts");
+
                 // The matchMedia query is "(max-width: 640px)"
                 // Starting from a width <= 640px, we'll get 1 event when crossing back to > 640px.
                 // This happens when the width changes from 640px to 704px.
@@ -243,6 +259,7 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                assertRecipeCarouselResizeObserverCount(page, "IncreaseWidthIn5Steps");
             }),
         ],
     },

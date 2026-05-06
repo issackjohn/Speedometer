@@ -118,6 +118,10 @@ class Page {
         return this._wrapElement(this._frame.contentWindow[functionName]());
     }
 
+    getWindowProperty(name) {
+        return this._frame.contentWindow[name];
+    }
+
     setWidth(widthPx) {
         this._frame.style.width = `${widthPx}px`;
     }

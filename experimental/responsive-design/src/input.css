@@ -17,6 +17,7 @@
 
 @layer utilities {
     .content-auto {
+        /* Keep this explicit so the workload continues to exercise content-visibility: auto. */
         content-visibility: auto;
     }
     .scrollbar-hide::-webkit-scrollbar {

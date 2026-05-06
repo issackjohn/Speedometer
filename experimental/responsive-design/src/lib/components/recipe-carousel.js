@@ -4,6 +4,15 @@ import { LightDOMLitElement } from "./base.js";
 
 const ITEMS_PER_VIEW_XL = 5;
 const ITEMS_PER_VIEW_DEFAULT = 3;
+const RESIZE_OBSERVER_CALLBACK_COUNT = "recipeCarouselResizeObserverCallbackCount";
+const RESIZE_OBSERVER_ENTRY_COUNT = "recipeCarouselResizeObserverEntryCount";
+
+function resetRecipeCarouselResizeObserverCounts() {
+    window[RESIZE_OBSERVER_CALLBACK_COUNT] = 0;
+    window[RESIZE_OBSERVER_ENTRY_COUNT] = 0;
+}
+
+window.resetRecipeCarouselResizeObserverCounts = resetRecipeCarouselResizeObserverCounts;
 
 class RecipeCarousel extends LightDOMLitElement {
     static properties = {
@@ -17,8 +26,15 @@ class RecipeCarousel extends LightDOMLitElement {
         this.carouselItems = carouselItems;
         this._currentIndex = 0;
         this._carouselWidth = 0;
+        resetRecipeCarouselResizeObserverCounts();
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
+            window[RESIZE_OBSERVER_CALLBACK_COUNT]++;
+            window[RESIZE_OBSERVER_ENTRY_COUNT] += entries.length;
+
+            if (entries.length !== 1)
+                console.warn(`Expected one recipe carousel ResizeObserver entry, got ${entries.length}.`);
+
             for (const entry of entries) {
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
                     this._carouselWidth = entry.contentBoxSize[0].inlineSize;
