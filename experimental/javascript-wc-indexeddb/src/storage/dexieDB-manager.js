@@ -9,6 +9,7 @@ class DexieDBManager extends BaseStorageManager {
     async initDB() {
         // Delete the existing database first for clean state
         await Dexie.delete(this.dbName);
+        this._resetCompletionCounters();
 
         this.db = new Dexie(this.dbName);
 

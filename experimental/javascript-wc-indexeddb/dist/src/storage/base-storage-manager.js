@@ -7,12 +7,16 @@ class BaseStorageManager {
         this.dbName = "todoDB";
         this.storeName = "todos";
         this.db = null;
-        this.finishedAdditions = 0;
-        this.finishedToggles = 0;
-        this.finishedDeletions = 0;
+        this._resetCompletionCounters();
         this.initDB().then(() => {
             this._dispatchReadyEvent();
         });
+    }
+
+    _resetCompletionCounters() {
+        this.finishedAdditions = 0;
+        this.finishedToggles = 0;
+        this.finishedDeletions = 0;
     }
 
     _ensureDbConnection() {
@@ -20,8 +24,8 @@ class BaseStorageManager {
             throw new Error("Database connection is not established");
     }
 
-    // When runner in Speedometer, additions, completions and removals are
-    // triggered synchonously in a tight loop, increasing the pending counters.
+    // Speedometer triggers additions, completions, and removals synchronously
+    // in a tight loop, increasing the pending counters.
     // The completion events are dispatched only when all pending operations
     // of that type are complete.
 
