@@ -13,6 +13,7 @@ function resetRecipeCarouselResizeObserverCounts() {
 }
 
 window.resetRecipeCarouselResizeObserverCounts = resetRecipeCarouselResizeObserverCounts;
+resetRecipeCarouselResizeObserverCounts();
 
 class RecipeCarousel extends LightDOMLitElement {
     static properties = {
@@ -26,8 +27,6 @@ class RecipeCarousel extends LightDOMLitElement {
         this.carouselItems = carouselItems;
         this._currentIndex = 0;
         this._carouselWidth = 0;
-        resetRecipeCarouselResizeObserverCounts();
-        // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
             window[RESIZE_OBSERVER_CALLBACK_COUNT]++;
             window[RESIZE_OBSERVER_ENTRY_COUNT] += entries.length;

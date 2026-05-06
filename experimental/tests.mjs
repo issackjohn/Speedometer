@@ -3,15 +3,14 @@ import { getTodoText } from "../resources/shared/translations.mjs";
 import { numberOfItemsToAdd } from "../resources/shared/todomvc-utils.mjs";
 import { freezeSuites } from "../resources/suites-helper.mjs";
 
-function assertRecipeCarouselResizeObserverCount(page, testName) {
-    const expectedCallbacks = 2;
+function assertRecipeCarouselResizeObserverCounts(page, testName) {
+    const expectedCount = 2;
     const actualCallbacks = page.getWindowProperty("recipeCarouselResizeObserverCallbackCount");
-    if (actualCallbacks === expectedCallbacks)
+    const actualEntries = page.getWindowProperty("recipeCarouselResizeObserverEntryCount");
+    if (actualCallbacks === expectedCount && actualEntries === expectedCount)
         return;
 
-    const message = `${testName} expected ${expectedCallbacks} recipe carousel ResizeObserver callbacks, got ${actualCallbacks}.`;
-    console.warn(message);
-    throw new Error(message);
+    throw new Error(`${testName} expected ${expectedCount} recipe carousel ResizeObserver callbacks and entries, got ${actualCallbacks} callbacks and ${actualEntries} entries.`);
 }
 
 export const ExperimentalSuites = freezeSuites([
@@ -187,9 +186,7 @@ export const ExperimentalSuites = freezeSuites([
 
                 page.call("resetRecipeCarouselResizeObserverCounts");
 
-                // The matchMedia query is "(max-width: 640px)"
-                // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
-                // This happens when the width changes from 704px to 640px
+                // Wait for the matchMedia callback when crossing "(max-width: 640px)".
                 const resizeWorkPromise = new Promise((resolve) => {
                     page.addEventListener("resize-work-complete", resolve, { once: true });
                 });
@@ -202,7 +199,7 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-                assertRecipeCarouselResizeObserverCount(page, "ReduceWidthIn5Steps");
+                assertRecipeCarouselResizeObserverCounts(page, "ReduceWidthIn5Steps");
             }),
             new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
                 const cvWorkComplete = new Promise((resolve) => {
@@ -244,9 +241,7 @@ export const ExperimentalSuites = freezeSuites([
 
                 page.call("resetRecipeCarouselResizeObserverCounts");
 
-                // The matchMedia query is "(max-width: 640px)"
-                // Starting from a width <= 640px, we'll get 1 event when crossing back to > 640px.
-                // This happens when the width changes from 640px to 704px.
+                // Wait for the matchMedia callback when crossing back over "(max-width: 640px)".
                 const resizeWorkPromise = new Promise((resolve) => {
                     page.addEventListener("resize-work-complete", resolve, { once: true });
                 });
@@ -259,7 +254,7 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-                assertRecipeCarouselResizeObserverCount(page, "IncreaseWidthIn5Steps");
+                assertRecipeCarouselResizeObserverCounts(page, "IncreaseWidthIn5Steps");
             }),
         ],
     },
