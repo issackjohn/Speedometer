@@ -36,7 +36,10 @@ class BaseStorageManager {
     }
 
     _handleRemoveComplete() {
-        if (++this.finishedDeletions === numberOfItemsToAdd) {
+        const deletedItems = ++this.finishedDeletions;
+        window.dispatchEvent(new CustomEvent(promisesEventsNames.deleteItem, { detail: { deletedItems } }));
+
+        if (deletedItems === numberOfItemsToAdd) {
             this.db.close();
             window.dispatchEvent(new CustomEvent(promisesEventsNames.delete, {}));
         }
