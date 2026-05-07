@@ -28,7 +28,6 @@ The measured time stops when the last item has been marked as completed, it does
 The benchmarks runs a loop of 10 iterations. On each iteration the 10 items in the current page are deleted (from the DOM and the database), and the "Previous page" button is clicked.
 
 When moving to the previous page the previous 10 items are loaded from the database, this is included in the measured time.
-Each page waits for its delete operations to finish before loading the previous page so the delete/write and read work is ordered consistently.
 
 ## Storage Options
 

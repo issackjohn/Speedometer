@@ -10,7 +10,6 @@ export const promisesEventsNames = {
     add: "db-add-completed",
     toggle: "db-toggle-completed",
     delete: "db-delete-completed",
-    deleteItem: "db-delete-item-completed",
 };
 
 const addPromise = new Promise((resolve) => {
@@ -19,24 +18,13 @@ const addPromise = new Promise((resolve) => {
 const togglePromise = new Promise((resolve) => {
     window.addEventListener(promisesEventsNames.toggle, () => resolve());
 });
+const deletePromise = new Promise((resolve) => {
+    window.addEventListener(promisesEventsNames.delete, () => resolve());
+});
 
 function waitForPreviousPageLoaded() {
     return new Promise((resolve) => {
         window.addEventListener("previous-page-loaded", resolve, { once: true });
-    });
-}
-
-function waitForDeletedItemsCount(expectedDeletedItems) {
-    return new Promise((resolve) => {
-        const handleDeleteItemCompleted = (event) => {
-            if (event.detail.deletedItems < expectedDeletedItems)
-                return;
-
-            window.removeEventListener(promisesEventsNames.deleteItem, handleDeleteItemCompleted);
-            resolve();
-        };
-
-        window.addEventListener(promisesEventsNames.deleteItem, handleDeleteItemCompleted);
     });
 }
 
@@ -84,15 +72,12 @@ const suites = {
             const numberOfItemsPerIteration = 10;
             const numberOfIterations = 10;
             for (let j = 0; j < numberOfIterations; j++) {
-                const expectedDeletedItems = (j + 1) * numberOfItemsPerIteration;
-                const deletedItemsPromise = waitForDeletedItemsCount(expectedDeletedItems);
                 const todoList = document.querySelector("todo-app").shadowRoot.querySelector("todo-list");
                 const items = todoList.shadowRoot.querySelectorAll("todo-item");
                 for (let i = numberOfItemsPerIteration - 1; i >= 0; i--) {
                     const item = items[i].shadowRoot.querySelector(".remove-todo-button");
                     item.click();
                 }
-                await deletedItemsPromise;
                 if (j < 9) {
                     const previousPageButton = document.querySelector("todo-app").shadowRoot.querySelector("todo-bottombar").shadowRoot.querySelector(".previous-page-button");
                     const previousPageLoadedPromise = waitForPreviousPageLoaded();
@@ -101,6 +86,13 @@ const suites = {
                 }
             }
         }),
+        new BenchmarkStep(
+            "FinishDeletingItemsFromDB",
+            async () => {
+                await deletePromise;
+            },
+            /* ignoreResult = */ true
+        ),
     ]),
 };
 

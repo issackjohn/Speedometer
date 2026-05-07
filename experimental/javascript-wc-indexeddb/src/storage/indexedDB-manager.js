@@ -11,7 +11,6 @@ class IndexedDBManager extends BaseStorageManager {
             };
 
             deleteRequest.onsuccess = () => {
-                this._resetCompletionCounters();
                 this.openDatabase(resolve, reject);
             };
 
