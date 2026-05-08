@@ -231,7 +231,7 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 const chatWindow = page.querySelector("#chat-window", ["cooking-app", "chat-window"]);
-                chatWindow.scrollIntoView({ behavior: "instant", block: "nearest" });
+                chatWindow.scrollIntoView({ behavior: "instant", block: "end" });
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
@@ -242,7 +242,11 @@ export const ExperimentalSuites = freezeSuites([
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                await cvWorkComplete;
+                // Safari has a scrollIntoView overscroll bug (webkit.org/b/298554) that
+                // can prevent contentvisibilityautostatechange from firing. Use a timeout
+                // fallback so the test doesn't hang indefinitely.
+                const timeout = new Promise((resolve) => setTimeout(resolve, 10000));
+                await Promise.race([cvWorkComplete, timeout]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
