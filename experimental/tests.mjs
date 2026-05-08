@@ -194,6 +194,9 @@ export const ExperimentalSuites = freezeSuites([
                 const widths = [768, 704, 640, 560, 480];
                 const MATCH_MEDIA_QUERY_BREAKPOINT = 640;
 
+                // The matchMedia query is "(max-width: 640px)"
+                // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
+                // This happens when the width changes from 704px to 640px
                 const resizeWorkPromise = new Promise((resolve) => {
                     page.addEventListener("resize-work-complete", resolve, { once: true });
                 });
