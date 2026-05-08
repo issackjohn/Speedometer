@@ -231,7 +231,7 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 const chatWindow = page.querySelector("#chat-window", ["cooking-app", "chat-window"]);
-                chatWindow.scrollIntoView({ behavior: "instant", block: "end" });
+                chatWindow.scrollIntoView({ behavior: "instant" });
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
