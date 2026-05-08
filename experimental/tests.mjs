@@ -243,10 +243,11 @@ export const ExperimentalSuites = freezeSuites([
                     page.layout();
                 }
 
-                // contentvisibilityautostatechange may not fire when the iframe
-                // viewport is small enough that content stays within the
-                // browser's "near viewport" proximity margin. Wait for layout
-                // to settle via double rAF instead.
+                // contentvisibilityautostatechange doesn't fire when the
+                // element stays within the browser's "near viewport" proximity
+                // margin, which can happen in a small iframe. Fall back to
+                // double rAF so we don't hang waiting for an event that won't
+                // come.
                 await Promise.race([cvWorkComplete, new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
