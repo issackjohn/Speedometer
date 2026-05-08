@@ -194,9 +194,6 @@ export const ExperimentalSuites = freezeSuites([
                 const widths = [768, 704, 640, 560, 480];
                 const MATCH_MEDIA_QUERY_BREAKPOINT = 640;
 
-                // The matchMedia query is "(max-width: 640px)"
-                // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
-                // This happens when the width changes from 704px to 640px
                 const resizeWorkPromise = new Promise((resolve) => {
                     page.addEventListener("resize-work-complete", resolve, { once: true });
                 });
@@ -204,8 +201,12 @@ export const ExperimentalSuites = freezeSuites([
                 for (const width of widths) {
                     page.setWidth(width);
                     page.layout();
-                    if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
-                        await resizeWorkPromise;
+                    if (width === MATCH_MEDIA_QUERY_BREAKPOINT) {
+                        await Promise.race([
+                            resizeWorkPromise,
+                            new Promise((_, reject) => setTimeout(() => reject(new Error("[diag] ReduceWidthIn5Steps: resize-work-complete timed out after 30s")), 30000)),
+                        ]);
+                    }
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -249,9 +250,15 @@ export const ExperimentalSuites = freezeSuites([
                 page.scrollTo(0, page.scrollY + videoRect.top);
                 page.layout();
 
-                await cvWorkComplete;
+                console.log("[diag] ScrollToChatAndSendMessages: awaiting cvWorkComplete");
+                await Promise.race([
+                    cvWorkComplete,
+                    new Promise((_, reject) => setTimeout(() => reject(new Error("[diag] ScrollToChatAndSendMessages: video-grid-content-visibility-complete timed out after 30s")), 30000)),
+                ]);
+                console.log("[diag] ScrollToChatAndSendMessages: done");
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
+                console.log("[diag] IncreaseWidthIn5Steps: start");
                 const widths = [560, 640, 704, 768, 800];
                 const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
 
