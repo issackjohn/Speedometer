@@ -231,7 +231,8 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 const chatWindow = page.querySelector("#chat-window", ["cooking-app", "chat-window"]);
-                chatWindow.scrollIntoView({ behavior: "instant" });
+                const chatRect = chatWindow.getBoundingClientRect();
+                page.scrollTo(0, page.scrollY + chatRect.top);
                 page.layout();
 
                 const messagesToBeSent = ["Please generate an image of Tomato Soup.", "Try again, but make the soup look thicker.", "Try again, but make the soup served in a rustic bowl and include a sprinkle of fresh herbs on top."];
@@ -244,7 +245,8 @@ export const ExperimentalSuites = freezeSuites([
                 }
 
                 const videoGrid = page.querySelector("video-grid", ["cooking-app"]);
-                videoGrid.scrollIntoView({ behavior: "instant" });
+                const videoRect = videoGrid.getBoundingClientRect();
+                page.scrollTo(0, page.scrollY + videoRect.top);
                 page.layout();
 
                 await cvWorkComplete;
