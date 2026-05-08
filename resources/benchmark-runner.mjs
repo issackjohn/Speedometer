@@ -122,6 +122,10 @@ class Page {
         this._frame.style.width = `${widthPx}px`;
     }
 
+    scrollTo(x, y) {
+        this._frame.contentWindow.scrollTo(x, y);
+    }
+
     _wrapElement(element) {
         return new PageElement(element);
     }
@@ -160,11 +164,11 @@ class PageElement {
     }
 
     scrollIntoView(options) {
-        const rect = this.#node.getBoundingClientRect();
-        const win = this.#node.ownerDocument.defaultView;
-        const top = win.scrollY + rect.top;
-        const left = win.scrollX + rect.left;
-        win.scrollTo({ top, left, behavior: options?.behavior ?? "instant" });
+        this.#node.scrollIntoView(options);
+    }
+
+    getBoundingClientRect() {
+        return this.#node.getBoundingClientRect();
     }
 
     dispatchEvent(eventName, options = NATIVE_OPTIONS, eventType = Event) {
