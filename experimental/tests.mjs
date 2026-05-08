@@ -243,11 +243,10 @@ export const ExperimentalSuites = freezeSuites([
                     page.layout();
                 }
 
-                // contentvisibilityautostatechange doesn't fire when the
-                // element stays within the browser's "near viewport" proximity
-                // margin, which can happen in a small iframe. Fall back to
-                // double rAF so we don't hang waiting for an event that won't
-                // come.
+                // Safari (in the e2e CI) doesn't fire contentvisibilityautostatechange
+                // when the video-grid stays within the browser's "near viewport"
+                // proximity margin, which happens at the small iframe sizes
+                // used here. Fall back to double rAF so the test doesn't hang.
                 await Promise.race([cvWorkComplete, new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
