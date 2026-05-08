@@ -242,7 +242,12 @@ export const ExperimentalSuites = freezeSuites([
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                await cvWorkComplete;
+
+                // Safari (in the e2e CI) doesn't fire contentvisibilityautostatechange
+                // when the video-grid stays within the browser's "near viewport"
+                // proximity margin, which happens at the small iframe sizes
+                // used here. Fall back to double rAF so the test doesn't hang.
+                await Promise.race([cvWorkComplete, new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
