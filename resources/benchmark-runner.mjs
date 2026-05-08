@@ -160,7 +160,11 @@ class PageElement {
     }
 
     scrollIntoView(options) {
-        this.#node.scrollIntoView(options);
+        const rect = this.#node.getBoundingClientRect();
+        const win = this.#node.ownerDocument.defaultView;
+        const top = win.scrollY + rect.top;
+        const left = win.scrollX + rect.left;
+        win.scrollTo({ top, left, behavior: options?.behavior ?? "instant" });
     }
 
     dispatchEvent(eventName, options = NATIVE_OPTIONS, eventType = Event) {

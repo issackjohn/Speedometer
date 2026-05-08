@@ -242,11 +242,7 @@ export const ExperimentalSuites = freezeSuites([
                     chatInput.enter("keydown");
                     page.layout();
                 }
-                // Safari has a scrollIntoView overscroll bug (webkit.org/b/298554) that
-                // can prevent contentvisibilityautostatechange from firing. Use a timeout
-                // fallback so the test doesn't hang indefinitely.
-                const timeout = new Promise((resolve) => setTimeout(resolve, 10000));
-                await Promise.race([cvWorkComplete, timeout]);
+                await cvWorkComplete;
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
