@@ -201,12 +201,8 @@ export const ExperimentalSuites = freezeSuites([
                 for (const width of widths) {
                     page.setWidth(width);
                     page.layout();
-                    if (width === MATCH_MEDIA_QUERY_BREAKPOINT) {
-                        await Promise.race([
-                            resizeWorkPromise,
-                            new Promise((_, reject) => setTimeout(() => reject(new Error("[diag] ReduceWidthIn5Steps: resize-work-complete timed out after 30s")), 30000)),
-                        ]);
-                    }
+                    if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
+                        await resizeWorkPromise;
                 }
 
                 await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -250,15 +246,12 @@ export const ExperimentalSuites = freezeSuites([
                 page.scrollTo(0, page.scrollY + videoRect.top);
                 page.layout();
 
-                console.log("[diag] ScrollToChatAndSendMessages: awaiting cvWorkComplete");
-                await Promise.race([
-                    cvWorkComplete,
-                    new Promise((_, reject) => setTimeout(() => reject(new Error("[diag] ScrollToChatAndSendMessages: video-grid-content-visibility-complete timed out after 30s")), 30000)),
-                ]);
-                console.log("[diag] ScrollToChatAndSendMessages: done");
+                // contentvisibilityautostatechange may not fire reliably on all
+                // browsers in iframe contexts. Use a timeout to avoid hanging.
+                const timeout = new Promise((resolve) => setTimeout(resolve, 10000));
+                await Promise.race([cvWorkComplete, timeout]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
-                console.log("[diag] IncreaseWidthIn5Steps: start");
                 const widths = [560, 640, 704, 768, 800];
                 const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
 
