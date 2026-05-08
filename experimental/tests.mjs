@@ -246,10 +246,7 @@ export const ExperimentalSuites = freezeSuites([
                 page.scrollTo(0, page.scrollY + videoRect.top);
                 page.layout();
 
-                // contentvisibilityautostatechange may not fire reliably on all
-                // browsers in iframe contexts. Use a timeout to avoid hanging.
-                const timeout = new Promise((resolve) => setTimeout(resolve, 10000));
-                await Promise.race([cvWorkComplete, timeout]);
+                await cvWorkComplete;
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
