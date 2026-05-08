@@ -246,7 +246,11 @@ export const ExperimentalSuites = freezeSuites([
                 page.scrollTo(0, page.scrollY + videoRect.top);
                 page.layout();
 
-                await cvWorkComplete;
+                // contentvisibilityautostatechange may not fire when the iframe
+                // viewport is small enough that content stays within the
+                // browser's "near viewport" proximity margin. Wait for layout
+                // to settle via double rAF instead.
+                await Promise.race([cvWorkComplete, new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
                 const widths = [560, 640, 704, 768, 800];
