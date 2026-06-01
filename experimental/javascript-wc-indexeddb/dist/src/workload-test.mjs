@@ -79,7 +79,13 @@ const suites = {
                     const item = items[i].shadowRoot.querySelector(".remove-todo-button");
                     item.click();
                 }
-                if (j < 9) {
+                if (j < numberOfIterations - 1) {
+                    // moveToPreviousPage() dispatches previous-page-loaded only
+                    // after the storage read for the previous page completes.
+                    // The read fetches lower item numbers than the page just
+                    // deleted, so it does not race those pending delete writes.
+                    // FinishDeletingItemsFromDB still waits for all deletes
+                    // before the suite advances.
                     const previousPageButton = document.querySelector("todo-app").shadowRoot.querySelector("todo-bottombar").shadowRoot.querySelector(".previous-page-button");
                     previousPageButton.click();
                     await iterationFinishedPromise;
