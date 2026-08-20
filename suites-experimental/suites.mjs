@@ -3,10 +3,14 @@ import { getTodoText } from "../resources/shared/translations.mjs";
 import { getNumberOfItemsToAdd } from "../resources/shared/todomvc-utils.mjs";
 import { freezeSuites } from "../resources/suites-helper.mjs";
 
+function waitForResizeObserverCallbacks() {
+    return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+}
+
 function reportRecipeCarouselResizeEvents(stepName, resizeEvents) {
     const count = resizeEvents.stop();
     if (count)
-        console.warn(`${stepName}: recipe-carousel ResizeObserver reported ${count} width change(s).`);
+        console.log(`${stepName}: recipe-carousel ResizeObserver reported ${count} width change(s).`);
     else
         console.warn(`${stepName}: recipe-carousel ResizeObserver reported 0 width changes; expected width changes during iframe resize.`);
 }
@@ -238,7 +242,7 @@ export const ExperimentalSuites = freezeSuites([
                         await resizeWorkPromise;
                 }
 
-                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                await waitForResizeObserverCallbacks();
                 reportRecipeCarouselResizeEvents("ReduceWidthIn5Steps", carouselResizeEvents);
             }),
             new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
@@ -299,7 +303,7 @@ export const ExperimentalSuites = freezeSuites([
                         await resizeWorkPromise;
                 }
 
-                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                await waitForResizeObserverCallbacks();
                 reportRecipeCarouselResizeEvents("IncreaseWidthIn5Steps", carouselResizeEvents);
             }),
         ],
