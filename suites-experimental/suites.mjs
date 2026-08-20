@@ -6,7 +6,7 @@ import { freezeSuites } from "../resources/suites-helper.mjs";
 function reportRecipeCarouselResizeEvents(stepName, resizeEvents) {
     const count = resizeEvents.stop();
     if (count)
-        console.log(`${stepName}: recipe-carousel ResizeObserver reported ${count} width change(s).`);
+        console.warn(`${stepName}: recipe-carousel ResizeObserver reported ${count} width change(s).`);
     else
         console.warn(`${stepName}: recipe-carousel ResizeObserver reported 0 width changes; expected width changes during iframe resize.`);
 }

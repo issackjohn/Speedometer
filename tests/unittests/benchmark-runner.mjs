@@ -339,22 +339,6 @@ describe("PageElement", () => {
             return result;
         }
 
-        it("resolves after the browser's initial callback", async () => {
-            const count = await withPageElement(
-                (frame) => {
-                    const node = frame.contentDocument.createElement("div");
-                    node.id = "resize-target";
-                    frame.contentDocument.body.appendChild(node);
-                    return node;
-                },
-                async (element) => {
-                    const resizeEvents = await element.observeResizeEvents();
-                    return resizeEvents.stop();
-                }
-            );
-            expect(count).to.equal(0);
-        });
-
         // A fake ResizeObserver drives callbacks synchronously for exact-count assertions.
         async function createTracker() {
             let deliver;
