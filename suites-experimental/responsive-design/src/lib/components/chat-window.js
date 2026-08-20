@@ -59,8 +59,16 @@ class ChatWindow extends LitElement {
     _getOptionsTemplate() {
         return html`
             <div class="flex flex-1 flex-col items-center justify-center gap-4 self-center p-4">
-                <button id="resume-previous-chat-btn" @click="${this._resumePreviousChat}" class="w-full rounded-md bg-teal-600/50 px-4 py-2 text-white hover:bg-teal-600 focus:outline-none">Resume Previous Chat</button>
-                <button @click="${this._startNewChat}" class="w-full rounded-md bg-orange-500/50 px-4 py-2 text-white hover:bg-orange-500 focus:outline-none">Start a New Conversation</button>
+                <button
+                    id="resume-previous-chat-btn"
+                    @click="${this._resumePreviousChat}"
+                    class="w-full rounded-md bg-teal-700 px-4 py-2 text-white hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+                >
+                    Resume Previous Chat
+                </button>
+                <button @click="${this._startNewChat}" class="w-full rounded-md bg-orange-700 px-4 py-2 text-white hover:bg-orange-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700">
+                    Start a New Conversation
+                </button>
             </div>
         `;
     }
@@ -83,9 +91,15 @@ class ChatWindow extends LitElement {
     render() {
         return html`
             <div id="chat-window" class="${this._isExpanded ? "h-[440px]" : "h-12"} bottom-2 right-2 m-auto flex flex-col rounded-lg border-2 border-solid bg-gray-50 shadow-lg sm:sticky sm:w-full md:fixed md:w-1/3">
-                <div class="${this._isExpanded ? "rounded-t-lg" : "rounded-lg"} flex items-center justify-between bg-teal-600/75 px-4 py-2 text-white shadow-md">
+                <div class="${this._isExpanded ? "rounded-t-lg" : "rounded-lg"} flex items-center justify-between bg-teal-700 px-4 py-2 text-white shadow-md">
                     <p class="text-lg font-semibold">Chef AI</p>
-                    <button id="expand-chat-btn" @click="${this._toggleExpand}" class="rounded-full bg-white px-2 py-1 text-sm text-teal-600/75 hover:bg-teal-100 focus:outline-none">${this._isExpanded ? "Collapse" : "Expand"}</button>
+                    <button
+                        id="expand-chat-btn"
+                        @click="${this._toggleExpand}"
+                        class="rounded-full bg-white px-2 py-1 text-sm text-teal-700 hover:bg-teal-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    >
+                        ${this._isExpanded ? "Collapse" : "Expand"}
+                    </button>
                 </div>
                 ${this._getContentTemplate()}
             </div>

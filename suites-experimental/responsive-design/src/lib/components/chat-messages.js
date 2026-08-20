@@ -35,7 +35,7 @@ class ChatMessages extends LightDOMLitElement {
                 <li class="${message.user ? "justify-end" : "justify-start"} flex items-start">
                     ${message.user
         ? html` <div class="flex items-center space-x-2">
-                              <div class="text-pretty rounded-md bg-teal-600 px-3 py-2 text-xs text-white lg:text-base">
+                              <div class="text-pretty rounded-md bg-teal-700 px-3 py-2 text-xs text-white lg:text-base">
                                   ${message.user} ${when(message.imageUrl, () => html`<img src="${message.imageUrl}" alt="${message.imageAlt}" class="mt-2 h-32 w-full rounded-md" />`)}
                               </div>
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 text-teal-600" fill="currentColor" viewBox="0 0 24 24">
