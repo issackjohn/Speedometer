@@ -151,7 +151,7 @@ class RecipeCard extends LightDOMLitElement {
                         <!-- Tags in compact mode -->
                         <div class="mt-2 flex flex-wrap gap-1">${this.recipe.tags.map((tag) => html`<span class="${this._getPillColor(tag)} inline-block rounded-full border px-2 py-0.5 text-xs font-medium">${tag}</span> `)}</div>
                     </div>
-                    <button class="show-more-btn flex-shrink-0 text-sm text-blue-500 hover:text-blue-700" @click="${this._toggleExpand}">${this.isExpanded ? "Less" : "More"}</button>
+                    <button class="show-more-btn flex-shrink-0 text-sm text-blue-600 hover:text-blue-700" @click="${this._toggleExpand}">${this.isExpanded ? "Less" : "More"}</button>
                 </div>
                 ${when(this.isExpanded, () => this._getExpandedTemplate())}
             </div>
@@ -163,7 +163,7 @@ class RecipeCard extends LightDOMLitElement {
             <div class="grid-rows-subgrid row-span-6 grid rounded-lg bg-gradient-to-br from-blue-50 to-green-50 text-left shadow-md">
                 <img src="${this.recipe.image}" alt="${this.recipe.text}" class="row-start-1 h-24 w-full rounded-t-lg object-cover" />
                 <h3 class="row-start-2 px-1 text-sm">${this.recipe.text}</h3>
-                <div class="max-w-40 row-start-3 flex justify-between px-2 pb-2 pt-0.5 text-xs text-gray-400">
+                <div class="max-w-40 row-start-3 flex justify-between px-2 pb-2 pt-0.5 text-xs text-gray-600">
                     <p>${this.recipe.time}</p>
                     |
                     <p>${this.recipe.calories}</p>
@@ -175,7 +175,7 @@ class RecipeCard extends LightDOMLitElement {
                     ${this.recipe.tags.map((tag) => html`<span class="${this._getPillColor(tag)} inline-flex items-center rounded-full border p-1 text-xs font-medium">${tag}</span> `)}
                 </div>
                 ${when(this.isExpanded, () => this._getExpandedTemplate())}
-                <button @click="${this._toggleExpand}" class="show-more-btn w-28 justify-self-end border-none bg-transparent p-1 text-sm text-blue-400 hover:text-blue-900">${this.isExpanded ? "Show Less" : "Show More..."}</button>
+                <button @click="${this._toggleExpand}" class="show-more-btn w-28 justify-self-end border-none bg-transparent p-1 text-sm text-blue-600 hover:text-blue-900">${this.isExpanded ? "Show Less" : "Show More..."}</button>
             </div>
         `;
     }

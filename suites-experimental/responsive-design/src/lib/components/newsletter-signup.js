@@ -10,7 +10,7 @@ class NewsletterSignup extends LightDOMLitElement {
                 <form class="mt-4">
                     <label for="email" class="sr-only">Enter your email</label>
                     <input id="email" type="email" placeholder="Enter your email" class="w-full rounded-md border border-gray-300 p-2" />
-                    <button type="submit" class="mt-2 w-full rounded-md bg-orange-500 p-2 text-white hover:bg-orange-600">Subscribe</button>
+                    <button type="submit" class="mt-2 w-full rounded-md bg-orange-700 p-2 text-white hover:bg-orange-800">Subscribe</button>
                 </form>
             </div>
         `;

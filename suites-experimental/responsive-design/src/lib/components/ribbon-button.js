@@ -16,7 +16,7 @@ class RibbonButton extends LightDOMLitElement {
     }
 
     render() {
-        const colorClass = this.variant === "primary" ? "bg-orange-400 hover:bg-orange-500" : "bg-teal-600 hover:bg-teal-800";
+        const colorClass = this.variant === "primary" ? "bg-orange-700 hover:bg-orange-800" : "bg-teal-700 hover:bg-teal-800";
         return html`
             <button class="${colorClass} mx-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold text-white shadow-md ring-1 ring-inset ring-gray-300">
                 <!-- Heroicons are MIT licensed. See https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->

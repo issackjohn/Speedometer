@@ -39,7 +39,7 @@ class ChatInput extends LightDOMLitElement {
                     @keydown="${this._handleKeyDown}"
                 >
                 </textarea>
-                <button @click="${this._sendMessage}" class="ml-2 rounded-md bg-teal-500 px-3 py-1 text-white hover:bg-teal-600 focus:outline-none">Send</button>
+                <button @click="${this._sendMessage}" class="ml-2 rounded-md bg-teal-700 px-3 py-1 text-white hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700">Send</button>
             </div>
         `;
     }
