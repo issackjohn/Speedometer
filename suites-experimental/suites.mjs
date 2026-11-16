@@ -3,12 +3,20 @@ import { getTodoText } from "../resources/shared/translations.mjs";
 import { getNumberOfItemsToAdd } from "../resources/shared/todomvc-utils.mjs";
 import { freezeSuites } from "../resources/suites-helper.mjs";
 
-function reportRecipeCarouselResizeEvents(stepName, resizeEvents) {
-    const count = resizeEvents.stop();
-    if (count)
-        console.warn(`${stepName}: recipe-carousel ResizeObserver reported ${count} width change(s).`);
-    else
-        console.warn(`${stepName}: recipe-carousel ResizeObserver reported 0 width changes; expected width changes during iframe resize.`);
+let responsiveResizeGeneration = 0;
+
+async function resizeResponsivePageInSteps(page, widths, expectedCompactLayoutState, expectCompactLayoutTransition) {
+    const generation = ++responsiveResizeGeneration;
+    const completion = page.call("beginResponsiveResize", generation, widths.at(-1), {
+        expectedCompactLayoutState,
+        expectCompactLayoutTransition,
+    });
+    for (const width of widths) {
+        page.setWidth(width);
+        page.layout();
+    }
+    page.call("finishResponsiveResize", generation);
+    await completion;
 }
 
 export const ExperimentalSuites = freezeSuites([
@@ -196,6 +204,7 @@ export const ExperimentalSuites = freezeSuites([
         resources: "suites-experimental/responsive-design/dist/resources.txt",
         tags: ["responsive-design", "webcomponents", "experimental"],
         type: "async",
+        asyncScheduler: "async-task",
         async prepare(page) {
             await page.waitForElement("cooking-app");
         },
@@ -220,26 +229,10 @@ export const ExperimentalSuites = freezeSuites([
                 }
             }),
             new BenchmarkTestStep("ReduceWidthIn5Steps", async (page) => {
-                const widths = [768, 704, 640, 560, 480];
-                const MATCH_MEDIA_QUERY_BREAKPOINT = 640;
-                const carouselResizeEvents = await page.querySelector(".carousel", ["cooking-app", "main-content", "recipe-carousel"]).observeResizeEvents();
+                await resizeResponsivePageInSteps(page, [768, 704, 640], true, true);
+                await resizeResponsivePageInSteps(page, [560, 480], true, false);
 
-                // The matchMedia query is "(max-width: 640px)"
-                // Starting from a width > 640px, we'll only get 1 event when crossing to <= 640px
-                // This happens when the width changes from 704px to 640px
-                const resizeWorkPromise = new Promise((resolve) => {
-                    page.addEventListener("resize-work-complete", resolve, { once: true });
-                });
-
-                for (const width of widths) {
-                    page.setWidth(width);
-                    page.layout();
-                    if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
-                        await resizeWorkPromise;
-                }
-
-                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-                reportRecipeCarouselResizeEvents("ReduceWidthIn5Steps", carouselResizeEvents);
+                await page.call("assertResponsiveResizeSettled", responsiveResizeGeneration);
             }),
             new BenchmarkTestStep("ScrollToChatAndSendMessages", async (page) => {
                 const cvWorkComplete = new Promise((resolve) => {
@@ -278,29 +271,13 @@ export const ExperimentalSuites = freezeSuites([
                 // video grid's contentvisibilityautostatechange event. See
                 // https://github.com/WebKit/Speedometer/issues/525. Remove this
                 // fallback once Speedometer CI runs a Safari with that WebKit fix.
-                await Promise.race([cvWorkComplete, new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))]);
+                await Promise.race([cvWorkComplete, page.afterNextRenderingOpportunity()]);
             }),
             new BenchmarkTestStep("IncreaseWidthIn5Steps", async (page) => {
-                const widths = [560, 640, 704, 768, 800];
-                const MATCH_MEDIA_QUERY_BREAKPOINT = 704;
-                const carouselResizeEvents = await page.querySelector(".carousel", ["cooking-app", "main-content", "recipe-carousel"]).observeResizeEvents();
+                await resizeResponsivePageInSteps(page, [560, 640, 704], false, true);
+                await resizeResponsivePageInSteps(page, [768, 800], false, false);
 
-                // The matchMedia query is "(max-width: 640px)"
-                // Starting from a width <= 640px, we'll get 1 event when crossing back to > 640px.
-                // This happens when the width changes from 640px to 704px.
-                const resizeWorkPromise = new Promise((resolve) => {
-                    page.addEventListener("resize-work-complete", resolve, { once: true });
-                });
-
-                for (const width of widths) {
-                    page.setWidth(width);
-                    page.layout();
-                    if (width === MATCH_MEDIA_QUERY_BREAKPOINT)
-                        await resizeWorkPromise;
-                }
-
-                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-                reportRecipeCarouselResizeEvents("IncreaseWidthIn5Steps", carouselResizeEvents);
+                await page.call("assertResponsiveResizeSettled", responsiveResizeGeneration);
             }),
         ],
     },

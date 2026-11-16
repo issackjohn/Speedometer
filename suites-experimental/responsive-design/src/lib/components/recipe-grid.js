@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { LightDOMLitElement } from "./base";
 import { recipes } from "../../data/recipes.js";
+import { attachResponsiveResizeCommit, awaitStableUpdate, startResponsiveResize } from "../resize-work-coordinator.js";
 import "./recipe-card.js";
 
 class RecipeGrid extends LightDOMLitElement {
@@ -35,11 +36,20 @@ class RecipeGrid extends LightDOMLitElement {
     }
 
     async _handleLayoutChange(event) {
+        const generation = startResponsiveResize("recipe-grid");
         this.isCompactLayout = event.matches;
+        const commit = this._commitResize();
 
-        await this.updateComplete;
+        if (generation !== null)
+            attachResponsiveResizeCommit("recipe-grid", generation, commit);
 
+        await commit;
         window.dispatchEvent(new CustomEvent("resize-work-complete"));
+    }
+
+    async _commitResize() {
+        await awaitStableUpdate(this);
+        await Promise.all([...this.querySelectorAll("recipe-card")].map(awaitStableUpdate));
     }
 
     _handleToggleExpand(event) {

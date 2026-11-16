@@ -103,9 +103,8 @@ class Page {
         return this._wrapElement(element);
     }
 
-    call(functionName) {
-        this._frame.contentWindow[functionName]();
-        return null;
+    call(functionName, ...args) {
+        return this._frame.contentWindow[functionName](...args);
     }
 
     callAsync(functionName) {
@@ -120,6 +119,20 @@ class Page {
 
     setWidth(widthPx) {
         this._frame.style.width = `${widthPx}px`;
+    }
+
+    afterNextRenderingOpportunity() {
+        const contentWindow = this._frame.contentWindow;
+        const channel = new contentWindow.MessageChannel();
+        return new Promise((resolve) => {
+            channel.port1.addEventListener("message", () => {
+                channel.port1.close();
+                channel.port2.close();
+                resolve();
+            }, { once: true });
+            channel.port1.start();
+            contentWindow.requestAnimationFrame(() => channel.port2.postMessage(null));
+        });
     }
 
     _wrapElement(element) {

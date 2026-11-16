@@ -1,5 +1,6 @@
 import { LitElement, html, adoptStyles } from "lit";
 import { restaurants } from "../../data/restaurants.js";
+import { attachResponsiveResizeCommit, awaitStableUpdate, startResponsiveResize } from "../resize-work-coordinator.js";
 import "./restaurant-card.js";
 
 import chatWindowStyles from "../chat-window.constructable.js";
@@ -19,10 +20,13 @@ class InformationWindow extends LitElement {
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
+                const generation = startResponsiveResize("information-window");
                 const height = entry.contentBoxSize && entry.contentBoxSize[0] ? entry.contentBoxSize[0].blockSize : entry.contentRect.height;
                 this._isChatExpanded = height > 350;
                 this._currentIndex = 0;
                 this.updateCarousel();
+                if (generation !== null)
+                    attachResponsiveResizeCommit("information-window", generation, this._commitResize());
             }
         });
     }
@@ -80,6 +84,11 @@ class InformationWindow extends LitElement {
         }
 
         this.requestUpdate();
+    }
+
+    async _commitResize() {
+        await awaitStableUpdate(this);
+        await Promise.all([...this.renderRoot.querySelectorAll("restaurant-card")].map(awaitStableUpdate));
     }
 
     _getExpandedTemplate() {

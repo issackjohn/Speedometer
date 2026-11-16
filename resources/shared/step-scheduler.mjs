@@ -6,11 +6,11 @@ class StepScheduler {
     }
 
     start() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             if (this._params.waitBeforeSync)
-                setTimeout(() => this._scheduleCallbacks(resolve), this._params.waitBeforeSync);
+                setTimeout(() => this._scheduleCallbacks(resolve, reject), this._params.waitBeforeSync);
             else
-                this._scheduleCallbacks(resolve);
+                this._scheduleCallbacks(resolve, reject);
         });
     }
 }
@@ -70,8 +70,27 @@ class AsyncRAFStepScheduler extends StepScheduler {
     }
 }
 
+class AsyncTaskStepScheduler extends StepScheduler {
+    static mc = new MessageChannel();
+
+    _scheduleCallbacks(resolve, reject) {
+        AsyncTaskStepScheduler.mc.port1.addEventListener("message", async () => {
+            try {
+                await this._syncCallback();
+                this._asyncCallback();
+                setTimeout(resolve, 0);
+            } catch (error) {
+                reject(error);
+            }
+        }, { once: true });
+        AsyncTaskStepScheduler.mc.port1.start();
+        AsyncTaskStepScheduler.mc.port2.postMessage(null);
+    }
+}
+
 export const STEP_SCHEDULER_LOOKUP = {
     __proto__: null,
     raf: RAFStepScheduler,
     async: AsyncRAFStepScheduler,
+    "async-task": AsyncTaskStepScheduler,
 };
