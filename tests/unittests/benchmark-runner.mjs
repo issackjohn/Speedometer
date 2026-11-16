@@ -305,6 +305,43 @@ describe("BenchmarkRunner", () => {
             assert.calledOnce(syncCallback);
             assert.calledOnce(asyncCallback);
         });
+
+        it("should await async callbacks in AsyncTaskStepScheduler", async () => {
+            let finishSyncCallback;
+            let syncCallbackStarted;
+            const started = new Promise((resolve) => {
+                syncCallbackStarted = resolve;
+            });
+            const syncCallback = sinon.stub().returns(new Promise((resolve) => {
+                finishSyncCallback = resolve;
+                syncCallbackStarted();
+            }));
+            const asyncCallback = sinon.stub();
+            const scheduler = new STEP_SCHEDULER_LOOKUP["async-task"](syncCallback, asyncCallback, { waitBeforeSync: 0 });
+            const result = scheduler.start();
+            await started;
+            expect(asyncCallback.called).to.be(false);
+            finishSyncCallback();
+            expect(await result).to.be(undefined);
+            assert.calledOnce(syncCallback);
+            assert.calledOnce(asyncCallback);
+        });
+
+        it("should reject when AsyncTaskStepScheduler callbacks fail", async () => {
+            const error = new Error("scheduler failure");
+            const scheduler = new STEP_SCHEDULER_LOOKUP["async-task"](
+                sinon.stub().rejects(error),
+                sinon.stub(),
+                { waitBeforeSync: 0 }
+            );
+            let rejection;
+            try {
+                await scheduler.start();
+            } catch (caughtError) {
+                rejection = caughtError;
+            }
+            expect(rejection).to.be(error);
+        });
     });
 });
 

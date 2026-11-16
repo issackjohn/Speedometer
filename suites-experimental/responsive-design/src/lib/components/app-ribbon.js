@@ -2,6 +2,7 @@ import { html } from "lit";
 import { when } from "lit/directives/when.js";
 import { LightDOMLitElement } from "./base";
 import { ribbonButtons } from "../../data/ribbon-buttons.js";
+import { attachResponsiveResizeCommit, awaitStableUpdate, startResponsiveResize } from "../resize-work-coordinator.js";
 import "./ribbon-button.js";
 
 class AppRibbon extends LightDOMLitElement {
@@ -16,10 +17,11 @@ class AppRibbon extends LightDOMLitElement {
         this.visibleButtons = this.buttons;
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
-                if (entry.contentBoxSize && entry.contentBoxSize[0])
-                    this._updateVisibleButtons(entry.contentBoxSize[0].inlineSize);
-                else
-                    this._updateVisibleButtons(entry.contentRect.width);
+                const inlineSize = entry.contentBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+                const generation = startResponsiveResize("app-ribbon");
+                this._updateVisibleButtons(inlineSize);
+                if (generation !== null)
+                    attachResponsiveResizeCommit("app-ribbon", generation, this._commitResize());
             }
         });
     }
@@ -28,11 +30,11 @@ class AppRibbon extends LightDOMLitElement {
         super.connectedCallback();
 
         if (this.hasUpdated)
-            this._resizeObserver.observe(this);
+            this._resizeObserver.observe(this.querySelector("[data-resize-sentinel]"), { box: "content-box" });
     }
 
     firstUpdated() {
-        this._resizeObserver.observe(this);
+        this._resizeObserver.observe(this.querySelector("[data-resize-sentinel]"), { box: "content-box" });
     }
 
     disconnectedCallback() {
@@ -64,6 +66,11 @@ class AppRibbon extends LightDOMLitElement {
             this.visibleButtons = this.buttons.slice(0, newButtonCount);
     }
 
+    async _commitResize() {
+        await awaitStableUpdate(this);
+        await Promise.all([...this.querySelectorAll("ribbon-button")].map(awaitStableUpdate));
+    }
+
     _getVisibleButtonsTemplate() {
         return this.visibleButtons.map(
             (button, index) => html`
@@ -75,6 +82,7 @@ class AppRibbon extends LightDOMLitElement {
 
     render() {
         return html`
+            <div data-resize-sentinel style="display: block; inline-size: 100%; block-size: 0; min-inline-size: 0; min-block-size: 0; padding: 0; border: 0;"></div>
             <nav class="mt-1 flex items-center justify-between p-1">
                 <div class="flex flex-nowrap items-baseline overflow-x-hidden">${this._getVisibleButtonsTemplate()}</div>
                 <div class="3xl:hidden">

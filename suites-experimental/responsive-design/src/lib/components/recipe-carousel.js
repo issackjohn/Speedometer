@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { carouselItems } from "../../data/carousel-items.js";
 import { LightDOMLitElement } from "./base.js";
+import { attachResponsiveResizeCommit, awaitStableUpdate, startResponsiveResize } from "../resize-work-coordinator.js";
 
 const ITEMS_PER_VIEW_XL = 5;
 const ITEMS_PER_VIEW_DEFAULT = 3;
@@ -20,10 +21,13 @@ class RecipeCarousel extends LightDOMLitElement {
         // ResizeObserver is used primarily to exercise this API as part of the benchmark.
         this._resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
+                const generation = startResponsiveResize("recipe-carousel");
                 if (entry.contentBoxSize && entry.contentBoxSize[0])
                     this._carouselWidth = entry.contentBoxSize[0].inlineSize;
                 else
                     this._carouselWidth = entry.contentRect.width;
+                if (generation !== null)
+                    attachResponsiveResizeCommit("recipe-carousel", generation, awaitStableUpdate(this));
             }
         });
     }
